@@ -8,6 +8,7 @@ import MainNavbar from "./layout/MainNavbar.vue";
 import MainFooter from "./layout/MainFooter.vue";
 import Instituicoes from "./views/Instituicoes.vue";
 import Regioes from "./views/Regioes.vue";
+import Links_Telefones from "./views/Links_Telefones.vue";
 Vue.use(Router);
 
 export default new Router({
@@ -52,6 +53,15 @@ export default new Router({
       path: "/regioes",
       name: "inicio",
       components: { default: Regioes, header: MainNavbar, footer: MainFooter },
+      props: {
+        header: { colorOnScroll: 400 },
+        footer: { backgroundColor: "black" }
+      }
+    },
+    {
+      path: "/links",
+      name: "inicio",
+      components: { default: Links_Telefones, header: MainNavbar, footer: MainFooter },
       props: {
         header: { colorOnScroll: 400 },
         footer: { backgroundColor: "black" }
