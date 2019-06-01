@@ -5,9 +5,11 @@ import Inicio from "./views/Inicio.vue";
 import Login from "./views/Login.vue";
 import Profile from "./views/Profile.vue";
 import MainNavbar from "./layout/MainNavbar.vue";
+import SecondNavBar from "./layout/SecondNavBar.vue"
 import MainFooter from "./layout/MainFooter.vue";
 import Instituicoes from "./views/Instituicoes.vue";
-import Regioes from "./views/Regioes.vue";
+import Region from "./views/Region.vue";
+
 Vue.use(Router);
 
 export default new Router({
@@ -16,6 +18,15 @@ export default new Router({
       path: "/",
       name: "index",
       components: { default: Index, header: MainNavbar, footer: MainFooter },
+      props: {
+        header: { colorOnScroll: 400 },
+        footer: { backgroundColor: "black" }
+      }
+    },
+    {
+      path: "/region",
+      name: "region",
+      components: { default: Region, header: SecondNavBar, footer: MainFooter },
       props: {
         header: { colorOnScroll: 400 },
         footer: { backgroundColor: "black" }
@@ -43,15 +54,6 @@ export default new Router({
       path: "/instituicoes",
       name: "inicio",
       components: { default: Instituicoes, header: MainNavbar, footer: MainFooter },
-      props: {
-        header: { colorOnScroll: 400 },
-        footer: { backgroundColor: "black" }
-      }
-    },
-    {
-      path: "/regioes",
-      name: "inicio",
-      components: { default: Regioes, header: MainNavbar, footer: MainFooter },
       props: {
         header: { colorOnScroll: 400 },
         footer: { backgroundColor: "black" }
