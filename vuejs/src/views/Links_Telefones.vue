@@ -1,5 +1,98 @@
 <template>
-  <div class="container">
+<div class="wrapper">
+    <parallax class="section1">
+    </parallax>
+    <div class="main main-raised ">
+        <div class="md-layout-item md-size-66 md-xsmall-size-100 mx-auto">
+          <h2 class="text-center title">Regiões</h2>
+    			<div
+            class=" mx-auto text-center"
+          >
+					<b-table striped hover :fields="fields" :items="regions">
+						<template slot="imagem">
+                    <img
+                    :src="image"
+                    alt="Circle Image"
+                    class="img-raised rounded-circle img-fluid"
+                  />
+			      </template>
+					</b-table>
+					</div>
+        </div>
+			<modal v-if="newRegion" @close="newRegionHide">
+			    <template slot="header">
+			      <h4 class="modal-title"> Criar Região</h4>
+			      <md-button
+			        class="md-simple md-just-icon md-round modal-default-button"
+			        @click="newRegionHide"
+			      >x
+			      </md-button>
+			    </template>
+			
+			    <template slot="body">
+			      <md-field>
+			        <label>Nome da Região</label>
+			        <md-input v-model="region.name" type="text"></md-input>
+			      </md-field>
+			      <md-field>
+			        <label>Endereço da Região</label>
+			        <md-input v-model="region.address" type="text"></md-input>
+			      </md-field>      
+			      <md-field>
+			        <label>Numero de Pessoas na Região</label>
+			        <md-input v-model="region.population" type="text"></md-input>
+			      </md-field>
+			    </template>
+			
+			    <template slot="footer">
+			      <md-button
+			        class="md-danger md-simple"
+			        @click="newRegionHide"
+			        >Cancelar</md-button
+			      >
+			      <md-button @click="salvar" class="md-simple md-success">Criar Região</md-button>
+			
+			    </template>
+			  </modal>
+				<modal v-if="editRegion" @close="editRegionHide">
+			    <template slot="header">
+			      <h4 class="modal-title"> Criar Região</h4>
+			      <md-button
+			        class="md-simple md-just-icon md-round modal-default-button"
+			        @click="editRegionHide"
+			      >x
+			      </md-button>
+			    </template>
+			
+			    <template slot="body">
+			      <md-field>
+			        <label>Nome da Região</label>
+			        <md-input v-model="region.name" type="text"></md-input>
+			      </md-field>
+			      <md-field>
+			        <label>Endereço da Região</label>
+			        <md-input v-model="region.address" type="text"></md-input>
+			      </md-field>      
+			      <md-field>
+			        <label>Numero de Pessoas na Região</label>
+			        <md-input v-model="region.population" type="text"></md-input>
+			      </md-field>
+			    </template>
+			
+			    <template slot="footer">
+			      <md-button
+			        class="md-danger md-simple"
+			        @click="editRegionHide"
+			        >Fechar</md-button
+			      >
+			      <md-button @click="salvar" class="md-simple md-warning">Editar</md-button>
+						<md-button @click="salvar" class="md-simple md-danger">Excluir</md-button>
+			    </template>
+			  </modal>
+    </div>
+</div>
+</template>
+  <!-- <div class="container">
     <b-alert
       show
       dismissible
@@ -46,7 +139,7 @@
       </template>
     </b-table>
 
-    <!-- <b-list-group>
+    <b-list-group>
       <b-list-group-item v-for="(informacoes, id) in infos" :key="id">
         <strong>Nome:</strong>
         {{ informacoes.name }}
@@ -60,10 +153,8 @@
         <b-button variant="warning" size="lg" @click="carregar(informacoes.id)">Carregar</b-button>
         <b-button variant="danger" size="lg" class="ml-2" @click="excluir(informacoes.id)">Excluir</b-button>
       </b-list-group-item>
-    </b-list-group>-->
-  </div>
-</template>
-
+    </b-list-group>
+  </div> -->
 
 
 <script>
@@ -72,7 +163,7 @@ export default {
     return {
       mensagens: [],
       infos: this.obterInfos(),
-      fields:['name','description','link','phone'],
+      fields:['img','name','description','link','phone'],
       id_info: null,
       created_at: null,
       info: {
@@ -84,6 +175,7 @@ export default {
       }
     };
   },
+  
   methods: {
     limpar() {
       (this.name = ""),

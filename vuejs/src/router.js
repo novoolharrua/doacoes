@@ -70,7 +70,6 @@ export default new Router({
       }
     },
     {
-    {
       path: "/login",
       name: "login",
       components: { default: Login, header: MainNavbar, footer: MainFooter },
