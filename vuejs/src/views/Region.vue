@@ -8,17 +8,23 @@
     			<div
             class=" mx-auto text-center"
           >
-					<b-table striped hover :fields="fields" :items="regions">
-						<template slot="visualizar">
+					<b-table striped hover :fields="fields" :busy="isBusy" :items="regions">
+						
+						<template slot="visualizar" slot-scope="data">
 							<md-button
               class="md-success md-sm"
               target="_blank"
-                @click="newRegion = true"
+                @click="editRegionModal(data.item)"
               > Visualizar</md-button
             >
 			      </template>
+						<div slot="table-busy" class="text-center text-danger my-2">
+      		  <b-spinner class="align-middle"></b-spinner>
+      		  <strong>Loading...</strong>
+      		</div>
 					</b-table>
 					<md-button
+							id="criarRegiao"
               class="text-center md-success md-lg"
               target="_blank"
                 @click="newRegion = true"
@@ -26,8 +32,9 @@
             >
 					</div>
         </div>
-			<modal v-if="newRegion" @close="newRegionHide">
-			    <template slot="header">
+			<!-- CRIAR NOVA REGIAO MODAL -->
+			<modal v-if="newRegion" @close="newRegionHide" >
+					<template slot="header">
 			      <h4 class="modal-title"> Criar Região</h4>
 			      <md-button
 			        class="md-simple md-just-icon md-round modal-default-button"
@@ -52,18 +59,20 @@
 			    </template>
 			
 			    <template slot="footer">
-			      <md-button
-			        class="md-danger md-simple"
+			      
+						<md-button
+							class="md-danger md-simple"
 			        @click="newRegionHide"
 			        >Cancelar</md-button
 			      >
-			      <md-button @click="salvar" class="md-simple md-success">Criar Região</md-button>
-			
+			      <md-button @click="salvar" class="md-simple md-success"> Criar Região</md-button>
+						
 			    </template>
 			  </modal>
+				<!-- EDITAR REGIAO ATUAL -->
 				<modal v-if="editRegion" @close="editRegionHide">
 			    <template slot="header">
-			      <h4 class="modal-title"> Criar Região</h4>
+			      <h4 class="modal-title"> Visualizar Região</h4>
 			      <md-button
 			        class="md-simple md-just-icon md-round modal-default-button"
 			        @click="editRegionHide"
@@ -74,15 +83,15 @@
 			    <template slot="body">
 			      <md-field>
 			        <label>Nome da Região</label>
-			        <md-input v-model="region.name" type="text"></md-input>
+			        <md-input v-model="region_selected.name" type="text"></md-input>
 			      </md-field>
 			      <md-field>
 			        <label>Endereço da Região</label>
-			        <md-input v-model="region.address" type="text"></md-input>
+			        <md-input v-model="region_selected.address" type="text"></md-input>
 			      </md-field>      
 			      <md-field>
 			        <label>Numero de Pessoas na Região</label>
-			        <md-input v-model="region.population" type="text"></md-input>
+			        <md-input v-model="region_selected.population" type="text"></md-input>
 			      </md-field>
 			    </template>
 			
@@ -92,57 +101,16 @@
 			        @click="editRegionHide"
 			        >Fechar</md-button
 			      >
-			      <md-button @click="salvar" class="md-simple md-warning">Editar</md-button>
-						<md-button @click="salvar" class="md-simple md-danger">Excluir</md-button>
+			      <md-button class="md-simple md-warning" @click="editar">Editar</md-button>
+						<md-button class="md-simple md-danger" @click="excluir(region_selected.id_region)">Excluir</md-button>
 			    </template>
 			  </modal>
     </div>
 </div>
 </template>
-	<!-- <div class="container">
-		<b-alert show dismissible v-for="mensagem in mensagens"
-			:key="mensagem.texto"
-			:variant="mensagem.tipo">{{ mensagem.texto }}</b-alert>
-		<b-card>
-			<b-form-group label="Nome:">
-				<b-form-input type="text" size="lg"
-					v-model="region.name"
-					placeholder="Informe o Nome"></b-form-input>
-			</b-form-group>
-			<b-form-group label="Endereço:">
-				<b-form-input type="text" size="lg"
-					v-model="region.address"
-					placeholder="Informe o Endereço"></b-form-input>
-			</b-form-group>
-			<b-form-group label="População:">
-				<b-form-input type="number" size="lg"
-					v-model="region.population"
-					placeholder="Informe a população"></b-form-input>
-			</b-form-group>
-			
-
-			<hr>
-			<b-button @click="salvar"
-				size="lg" variant="primary">Salvar</b-button>
-			<b-button @click="obterRegions"
-				size="lg" variant="success"
-				class="ml-2">Obter Regiões</b-button>
-		</b-card>
-		<hr>
-		<b-list-group>
-			<b-list-group-item v-for="(regiao, id_region) in regions" :key="id_region">
-				<strong>Nome: </strong> {{ regiao.name }}<br>
-				<strong>Endereço: </strong> {{ regiao.address }}<br>
-				<strong>População: </strong> {{ regiao.population }}<br>
-				<b-button variant="warning" size="lg"
-					@click="carregar(regiao.id_region)">Carregar</b-button>
-				<b-button variant="danger" size="lg" class="ml-2"
-					@click="excluir(regiao.id_region)">Excluir</b-button>
-			</b-list-group-item>
-		</b-list-group>
-	</div> -->
 <script>
 import { Modal } from "@/components";
+import { log } from 'util';
 export default {
 	components: {
     Modal
@@ -150,10 +118,14 @@ export default {
 	data() {
 		return {
 			newRegion: false,
-			fields:['id_region','name','address','population','visualizar'],
+			editRegion: false,
+			fields:['name','address','population','visualizar'],
 			mensagens: [],
+			id_region: '',
+			isBusy: false,
 			regions: this.obterRegions(),
 			id: null,
+			region_selected:null,
 			region: {
       			name: '',
       			address: '',
@@ -166,12 +138,12 @@ export default {
       		this.name = '',
       		this.address = '',
       		this.population = null,
-			this.id = null
+			this.id_region = null
 			this.mensagens = []
 		},
 		carregar(id_region) {
-			this.id = id
-			this.region = { ...this.regions[id] }
+			this.id_region = id_region;
+			this.region = this.getRegion(id_region);
 		},
 		excluir(id_region) {
 			this.$http.delete(`/region/${id_region}`)
@@ -187,14 +159,24 @@ export default {
 					})
 				})
 		},
+		editar(){
+			this.excluir(this.region_selected.id_region);
+			this.region.name = this.region_selected.name;
+			this.region.address = this.region_selected.address;
+			this.region.population = this.region_selected.population;
+			this.editRegionHide();
+			this.salvar();
+		},
 		salvar() {
 			this.region.population = parseInt(this.region.population)
 			const metodo = 'post'
+			this.toggleBusy();
+			this.newRegion = false;
 			this.$http[metodo](`/region`, this.region)
 				.then(() => {
 					this.limpar();
+					this.toggleBusy();
 					this.obterRegions();
-					this.newRegion = false;
 					this.mensagens.push({
 						texto: 'Operação realizada com sucesso!',
 						tipo: 'success'
@@ -204,12 +186,35 @@ export default {
 		obterRegions() {
 			this.$http.get('region').then(res => {
 				this.regions = res.data.data;
-			})
+			});
 		},
+		toggleBusy() {
+			let disableStatus = document.getElementById("criarRegiao");
+			if (this.isBusy) {
+			disableStatus.classList.remove("disable");	
+			} else {
+			disableStatus.classList.add("disable");	
+			}
+        this.isBusy = !this.isBusy
+      },
 		newRegionHide() {
 			this.limpar()
       this.newRegion = false;
-    }
+		},
+		editRegionModal(data) {
+			this.region_selected = null;
+			this.$http.get('region/'+data.id_region).then(res => {
+				this.region_selected = res.data;
+				this.editRegion = true;
+				});
+		},
+		editRegionHide() {
+			this.region_selected = null;
+      this.editRegion = false;
+		},
+		Watch(){
+
+		}
 	}
 
 }
