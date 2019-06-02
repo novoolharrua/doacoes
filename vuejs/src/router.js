@@ -9,8 +9,9 @@ import SecondNavBar from "./layout/SecondNavBar.vue"
 import MainFooter from "./layout/MainFooter.vue";
 import Instituicoes from "./views/Instituicoes.vue";
 import Region from "./views/Region.vue";
-
 import Links_Telefones from "./views/Links_Telefones.vue";
+import Links_Telefones_Admin from "./views/Links_Telefones_Admin.vue";
+
 Vue.use(Router);
 
 export default new Router({
@@ -62,8 +63,17 @@ export default new Router({
     },
     {
       path: "/links",
-      name: "inicio",
+      name: "links",
       components: { default: Links_Telefones, header: SecondNavBar, footer: MainFooter },
+      props: {
+        header: { colorOnScroll: 400 },
+        footer: { backgroundColor: "black" }
+      }
+    },
+    {
+      path: "/links_admin",
+      name: "links admin",
+      components: { default: Links_Telefones_Admin, header: SecondNavBar, footer: MainFooter },
       props: {
         header: { colorOnScroll: 400 },
         footer: { backgroundColor: "black" }
