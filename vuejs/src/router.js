@@ -8,6 +8,7 @@ import MainNavbar from "./layout/MainNavbar.vue";
 import SecondNavBar from "./layout/SecondNavBar.vue"
 import MainFooter from "./layout/MainFooter.vue";
 import Instituicoes from "./views/Instituicoes.vue";
+import Instituicoes_Admin from "./views/Instituicoes_Admin.vue";
 import Region from "./views/Region.vue";
 import Links_Telefones from "./views/Links_Telefones.vue";
 import Links_Telefones_Admin from "./views/Links_Telefones_Admin.vue";
@@ -65,6 +66,15 @@ export default new Router({
       path: "/instituicoes",
       name: "inicio",
       components: { default: Instituicoes, header: MainNavbar, footer: MainFooter },
+      props: {
+        header: { colorOnScroll: 400 },
+        footer: { backgroundColor: "black" }
+      }
+    },
+    {
+      path: "/instituicoes_admin",
+      name: "instituicoes admin",
+      components: { default: Instituicoes_Admin, header: SecondNavBar, footer: MainFooter },
       props: {
         header: { colorOnScroll: 400 },
         footer: { backgroundColor: "black" }

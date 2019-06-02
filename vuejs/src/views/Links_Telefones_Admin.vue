@@ -89,7 +89,7 @@
 
       <modal v-if="editLink" @close="editLinkHide">
         <template slot="header">
-          <h4 class="modal-title">Visualizar Região</h4>
+          <h4 class="modal-title">Visualizar Infos/Telefones</h4>
           <md-button
             class="md-simple md-just-icon md-round modal-default-button"
             @click="editLinkHide"
