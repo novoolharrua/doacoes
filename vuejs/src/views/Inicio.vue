@@ -14,13 +14,13 @@
             <md-button
               class="md-success md-lg"
               target="_blank"
-                @click="classicModal = true"
+                @click="registrarModal = true"
               > Quero Participar</md-button
             >
               <md-button
               class="md-success md-lg"
               target="_blank"
-                @click="classicModal = true"
+                @click="registrarModal = true"
               > Já Sou Doador</md-button
             >
 
@@ -361,14 +361,14 @@
       </div>
     </div>
   <!--MODAL REGISTRE-SE-->
-  <modal v-if="classicModal" @close="classicModalHide">
+  <modal v-if="registrarModal" @close="registrarModalHide">
     <template slot="header">
       <h4 class="modal-title">Registre-se</h4>
 
 
       <md-button
         class="md-simple md-just-icon md-round modal-default-button"
-        @click="classicModalHide"
+        @click="registrarModalHide"
       >x
       </md-button>
     </template>
@@ -385,7 +385,57 @@
       <md-field>
         <label>CPF</label>
         <md-input v-model="cpf" type="text"></md-input>
-      </md-field>      
+      </md-field>
+      <md-field>
+        <label>CEP</label>
+        <md-input v-model="endereco.cep" type="text"></md-input>
+      </md-field>
+      <div class="md-layout-item text-right ml-auto">
+      <md-field>
+        <label>uf</label>
+        <md-input v-model="endereco.uf" type="text"></md-input>
+      </md-field>
+      <md-field>
+        <label>localidade</label>
+        <md-input v-model="endereco.localidade" type="text"></md-input>
+      </md-field>
+      </div>
+      <md-field>
+        <label>logradouro</label>
+        <md-input v-model="endereco.logradouro" type="text"></md-input>
+      </md-field>
+      <div class="md-layout ">
+      <div class="md-layout-item text-right ml-auto">
+      <md-field>
+        <label>bairro</label>
+        <md-input v-model="endereco.bairro" type="text"></md-input>
+      </md-field>
+      </div>
+      <div class="md-layout-item text-right ml-auto">
+      <md-field>
+        <label>number</label>
+        <md-input v-model="endereco.number" type="text"></md-input>
+      </md-field>
+      </div>
+      </div>
+      <div class="md-layout ">
+            <div class="md-layout-item text-right ml-auto">
+            <md-checkbox v-model="checkbox1">Alimentação</md-checkbox>
+            </div>
+            <div class="md-layout-item text-right ml-auto">
+            <md-checkbox v-model="checkbox2">Roupas</md-checkbox>
+            </div>
+            <div class="md-layout-item text-right ml-auto">
+            <md-checkbox v-model="checkbox3"
+              >Religiosidade</md-checkbox
+            >
+            </div>
+            <div class="md-layout-item text-right ml-auto">
+            <md-checkbox v-model="checkbox3"
+              >Outros</md-checkbox
+            >
+            </div>
+        </div>
       <md-field>
         <label>Senha</label>
         <md-input v-model="senha" type="password"></md-input>
@@ -395,7 +445,7 @@
     <template slot="footer">
       <md-button
         class="md-danger md-simple"
-        @click="classicModalHide"
+        @click="registrarModalHide"
         >Fechar</md-button
       >
       <md-button class="md-simple md-success">Registrar</md-button>
@@ -433,17 +483,30 @@ export default {
   },
   data() {
     return {
-      classicModal: false,
+      registrarModal: false,
       name: null,
       email: null,
       message: null,
-      image: require("@/assets/img/logos/logo.jpg")
-
+      image: require("@/assets/img/logos/logo.jpg"),
+      endereco: {
+        cep: '',
+        logradouro:'',
+        complemento: '',
+        bairro: '',
+        localidade: '',
+        uf: '',
+        number:''
+      }
     };
   },
   methods: {
-    classicModalHide() {
-      this.classicModal = false;
+    registrarModalHide() {
+      this.registrarModal = false;
+    },
+    obterInfos(cep) {
+      this.$correios.get(cep+"/json").then(res => {
+        this.endereco = res.data;
+      });
     }
   },
   computed: {

@@ -14,6 +14,12 @@ Vue.use({
                 "Authorization": ""
             }
         })
+        Vue.prototype.$correios = axios.create({
+            baseURL: ' viacep.com.br/ws/',
+            headers: {
+                "Authorization": ""
+            }
+        })
         Vue.prototype.$http.interceptors.request.use(config => {
             console.log(config.method)
             // if(config.method == 'post') {
