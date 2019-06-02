@@ -175,13 +175,13 @@ export default {
 			this.$http[metodo](`/region`, this.region)
 				.then(() => {
 					this.limpar();
-					this.toggleBusy();
-					this.obterRegions();
 					this.mensagens.push({
 						texto: 'Operação realizada com sucesso!',
 						tipo: 'success'
 					})
 				})
+				this.obterRegions();
+				this.toggleBusy();
 		},
 		obterRegions() {
 			this.$http.get('region').then(res => {

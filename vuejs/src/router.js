@@ -34,6 +34,15 @@ export default new Router({
       }
     },
     {
+      path: "/institution",
+      name: "inicio",
+      components: { default: Instituicoes, header: MainNavbar, footer: MainFooter },
+      props: {
+        header: { colorOnScroll: 400 },
+        footer: { backgroundColor: "black" }
+      }
+    },
+    {
       path: "/initial",
       name: "index",
       components: { default: Index, header: MainNavbar, footer: MainFooter },

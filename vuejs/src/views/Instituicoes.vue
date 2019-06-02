@@ -1,97 +1,155 @@
 <template>
-	<div class="container">
-		<b-alert show dismissible v-for="mensagem in mensagens"
-			:key="mensagem.texto"
-			:variant="mensagem.tipo">{{ mensagem.texto }}</b-alert>
-		<b-card>
-			<b-form-group label="Nome:">
-				<b-form-input type="text" size="lg"
-					v-model="institution.name"
-					placeholder="Informe o Nome"></b-form-input>
-			</b-form-group>
-			<b-form-group label="Endereço:">
-				<b-form-input type="text" size="lg"
-					v-model="institution.address"
-					placeholder="Informe o Endereço"></b-form-input>
-			</b-form-group>
-			<b-form-group label="E-mail:">
-				<b-form-input type="email" size="lg"
-					v-model="institution.email"
-					placeholder="Informe o Email"></b-form-input>
-			</b-form-group>
-			<b-form-group label="Senha:">
-				<b-form-input type="password" size="lg"
-					v-model="institution.passwd"
-					placeholder="Informe sua senha"></b-form-input>
-			</b-form-group >
-				<b-form-group label="Tipos de Doações:">
-				<b-form-checkbox-group id="checkbox-group-2" v-model="institution.types" name="flavour-2">
-					<b-form-checkbox value="FOOD">Alimentação</b-form-checkbox>
-					<b-form-checkbox value="CLOTHING">Roupas</b-form-checkbox>
-					<b-form-checkbox value="RELIGION">Religião</b-form-checkbox>
-					<b-form-checkbox value="OTHERS">Outros</b-form-checkbox>
-				</b-form-checkbox-group>
-				</b-form-group>
-			<hr>
-			<b-button @click="salvar"
-				size="lg" variant="primary">Salvar</b-button>
-			<b-button @click="obterInstitutions"
-				size="lg" variant="success"
-				class="ml-2">Obter Instituições</b-button>
-		</b-card>
-		<hr>
-		<b-list-group>
-			<b-list-group-item v-for="(instituicao, id) in Institutions" :key="id">
-				<strong>Nome: </strong> {{ instituicao.name }}<br>
-				<strong>Endereço: </strong> {{ instituicao.address }}<br>
-				<strong>E-mail: </strong> {{ instituicao.email }}<br>
-				<strong>Tipos de Doações: </strong> {{ instituicao.types }}<br>
-
-				<b-button variant="warning" size="lg"
-					@click="carregar(instituicao.id)">Carregar</b-button>
-				<b-button variant="danger" size="lg" class="ml-2"
-					@click="excluir(instituicao.id)">Excluir</b-button>
-			</b-list-group-item>
-		</b-list-group>
-	</div>
+  <div class="wrapper">
+    <parallax class="section1">
+    </parallax>
+    <div class="main main-raised ">
+        <div class="md-layout-item md-size-66 md-xsmall-size-100 mx-auto">
+          <h2 class="text-center title">Regiões</h2>
+    			<div
+            class=" mx-auto text-center"
+          >
+					<b-table striped hover :fields="fields" :busy="isBusy" :items="regions">
+						
+						<template slot="visualizar" slot-scope="data">
+							<md-button
+              class="md-success md-sm"
+              target="_blank"
+                @click="editRegionModal(data.item)"
+              > Visualizar</md-button
+            >
+			      </template>
+						<div slot="table-busy" class="text-center text-danger my-2">
+      		  <b-spinner class="align-middle"></b-spinner>
+      		  <strong>Loading...</strong>
+      		</div>
+					</b-table>
+					<md-button
+							id="criarRegiao"
+              class="text-center md-success md-lg"
+              target="_blank"
+                @click="newRegion = true"
+              > Criar Região</md-button
+            >
+					</div>
+        </div>
+			<!-- CRIAR NOVA REGIAO MODAL -->
+			<modal v-if="newRegion" @close="newRegionHide" >
+					<template slot="header">
+			      <h4 class="modal-title"> Criar Região</h4>
+			      <md-button
+			        class="md-simple md-just-icon md-round modal-default-button"
+			        @click="newRegionHide"
+			      >x
+			      </md-button>
+			    </template>
+			
+			    <template slot="body">
+			      <md-field>
+			        <label>Nome da Região</label>
+			        <md-input v-model="region.name" type="text"></md-input>
+			      </md-field>
+			      <md-field>
+			        <label>Endereço da Região</label>
+			        <md-input v-model="region.address" type="text"></md-input>
+			      </md-field>      
+			      <md-field>
+			        <label>Numero de Pessoas na Região</label>
+			        <md-input v-model="region.population" type="text"></md-input>
+			      </md-field>
+			    </template>
+			
+			    <template slot="footer">
+			      
+						<md-button
+							class="md-danger md-simple"
+			        @click="newRegionHide"
+			        >Cancelar</md-button
+			      >
+			      <md-button @click="salvar" class="md-simple md-success"> Criar Região</md-button>
+						
+			    </template>
+			  </modal>
+				<!-- EDITAR REGIAO ATUAL -->
+				<modal v-if="editRegion" @close="editRegionHide">
+			    <template slot="header">
+			      <h4 class="modal-title"> Visualizar Região</h4>
+			      <md-button
+			        class="md-simple md-just-icon md-round modal-default-button"
+			        @click="editRegionHide"
+			      >x
+			      </md-button>
+			    </template>
+			
+			    <template slot="body">
+			      <md-field>
+			        <label>Nome da Região</label>
+			        <md-input v-model="region_selected.name" type="text"></md-input>
+			      </md-field>
+			      <md-field>
+			        <label>Endereço da Região</label>
+			        <md-input v-model="region_selected.address" type="text"></md-input>
+			      </md-field>      
+			      <md-field>
+			        <label>Numero de Pessoas na Região</label>
+			        <md-input v-model="region_selected.population" type="text"></md-input>
+			      </md-field>
+			    </template>
+			
+			    <template slot="footer">
+			      <md-button
+			        class="md-danger md-simple"
+			        @click="editRegionHide"
+			        >Fechar</md-button
+			      >
+			      <md-button class="md-simple md-warning" @click="editar">Editar</md-button>
+						<md-button class="md-simple md-danger" @click="excluir(region_selected.id_region)">Excluir</md-button>
+			    </template>
+			  </modal>
+    </div>
+</div>
 </template>
 <script>
+import { Modal } from "@/components";
+import { log } from 'util';
 export default {
+	components: {
+    Modal
+  },
 	data() {
 		return {
+			newRegion: false,
+			editRegion: false,
+			fields:['name','address','population','visualizar'],
 			mensagens: [],
-			Institutions: [],
+			id_region: '',
+			isBusy: false,
+			regions: this.obterRegions(),
 			id: null,
-			institution: {
+			region_selected:null,
+			region: {
       			name: '',
       			address: '',
-				email: '',
-				passwd:'',
-				types: '',
-				shelter:0
+      			population: ''
 			}
 		}
 	},
 	methods: {
 		limpar() {
-			this.name = '',
+      		this.name = '',
       		this.address = '',
-			this.email = '',
-			this.passwd ='',
-			this.types = '',
-			this.shelter = 0
-			this.id = null
+      		this.population = null,
+			this.id_region = null
 			this.mensagens = []
 		},
-		carregar(id_instituition) {
-			this.id = id
-			this.institution = { ...this.Institutions[id] }
+		carregar(id_region) {
+			this.id_region = id_region;
+			this.region = this.getRegion(id_region);
 		},
-		excluir(id_instituition) {
-			this.$http.delete(`/institution/${id_instituition}`)
+		excluir(id_region) {
+			this.$http.delete(`/region/${id_region}`)
 				.then(() => {
 					this.limpar()
-					this.obterInstitutions()
+					this.obterRegions()
 					})
 				.catch(err => {
 					this.limpar()
@@ -101,27 +159,64 @@ export default {
 					})
 				})
 		},
+		editar(){
+			this.excluir(this.region_selected.id_region);
+			this.region.name = this.region_selected.name;
+			this.region.address = this.region_selected.address;
+			this.region.population = this.region_selected.population;
+			this.editRegionHide();
+			this.salvar();
+		},
 		salvar() {
-			this.institution.types = this.institution.types.join(",")
-			
+			this.region.population = parseInt(this.region.population)
 			const metodo = 'post'
-			this.$http[metodo](`/institution`, this.institution)
+			this.toggleBusy();
+			this.newRegion = false;
+			this.$http[metodo](`/region`, this.region)
 				.then(() => {
-					this.limpar()
-					this.obterInstitutions()
+					this.limpar();
+					this.toggleBusy();
+					this.obterRegions();
 					this.mensagens.push({
 						texto: 'Operação realizada com sucesso!',
 						tipo: 'success'
 					})
 				})
 		},
-		obterInstitutions() {
-			this.$http.get('institution').then(res => {
-				console.log(res.data)
-				this.Institutions = res.data
-			})
+		obterRegions() {
+			this.$http.get('region').then(res => {
+				this.regions = res.data.data;
+			});
+		},
+		toggleBusy() {
+			let disableStatus = document.getElementById("criarRegiao");
+			if (this.isBusy) {
+			disableStatus.classList.remove("disable");	
+			} else {
+			disableStatus.classList.add("disable");	
+			}
+        this.isBusy = !this.isBusy
+      },
+		newRegionHide() {
+			this.limpar()
+      this.newRegion = false;
+		},
+		editRegionModal(data) {
+			this.region_selected = null;
+			this.$http.get('region/'+data.id_region).then(res => {
+				this.region_selected = res.data;
+				this.editRegion = true;
+				});
+		},
+		editRegionHide() {
+			this.region_selected = null;
+      this.editRegion = false;
+		},
+		Watch(){
+
 		}
 	}
+
 }
 </script>
 
