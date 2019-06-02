@@ -63,7 +63,7 @@ export default new Router({
     {
       path: "/links",
       name: "inicio",
-      components: { default: Links_Telefones, header: MainNavbar, footer: MainFooter },
+      components: { default: Links_Telefones, header: SecondNavBar, footer: MainFooter },
       props: {
         header: { colorOnScroll: 400 },
         footer: { backgroundColor: "black" }

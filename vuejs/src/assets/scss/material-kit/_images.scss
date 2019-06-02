@@ -4,6 +4,10 @@
 .img-raised{
     @include shadow-big-image();
 }
+.size-img-link{
+    width: 10vh;
+    height: 10vh;
+}
 
 .size-img{
     width: 50vh;
