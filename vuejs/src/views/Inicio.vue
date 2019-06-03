@@ -386,24 +386,34 @@
         <label>CPF</label>
         <md-input v-model="cpf" type="text"></md-input>
       </md-field>
-      <md-field>
+      <div class="md-layout ">
+      <div class="md-layout-item text-right ml-auto">
+      <md-field id="cep">
         <label>CEP</label>
-        <md-input v-model="endereco.cep" type="text"></md-input>
+        <md-input v-on:keyup="obterCep" v-model="endereco.cep"  type="text"></md-input>
       </md-field>
+      </div>
+      <div class="md-layout-item text-right ml-auto">
+       <md-field>
+        <label>logradouro</label>
+        <md-input v-model="endereco.logradouro" type="text"></md-input>
+      </md-field>
+      </div>
+      </div>
+      <div class="md-layout ">
       <div class="md-layout-item text-right ml-auto">
       <md-field>
         <label>uf</label>
         <md-input v-model="endereco.uf" type="text"></md-input>
       </md-field>
+      </div>
+      <div class="md-layout-item text-right ml-auto">
       <md-field>
         <label>localidade</label>
         <md-input v-model="endereco.localidade" type="text"></md-input>
       </md-field>
       </div>
-      <md-field>
-        <label>logradouro</label>
-        <md-input v-model="endereco.logradouro" type="text"></md-input>
-      </md-field>
+      </div>
       <div class="md-layout ">
       <div class="md-layout-item text-right ml-auto">
       <md-field>
@@ -420,25 +430,24 @@
       </div>
       <div class="md-layout ">
             <div class="md-layout-item text-right ml-auto">
-            <md-checkbox v-model="checkbox1">Alimentação</md-checkbox>
+            <md-checkbox value="FOOD" v-model="doacoes.alimentacao" >Alimentação</md-checkbox>
             </div>
             <div class="md-layout-item text-right ml-auto">
-            <md-checkbox v-model="checkbox2">Roupas</md-checkbox>
+            <md-checkbox value="CLOTHING" v-model="doacoes.roupas">Roupas</md-checkbox>
             </div>
-            <div class="md-layout-item text-right ml-auto">
-            <md-checkbox v-model="checkbox3"
+            <div  class="md-layout-item text-right ml-auto">
+            <md-checkbox value="RELIGION" v-model="doacoes.religiao"
               >Religiosidade</md-checkbox
             >
             </div>
-            <div class="md-layout-item text-right ml-auto">
-            <md-checkbox v-model="checkbox3"
-              >Outros</md-checkbox
-            >
             </div>
-        </div>
       <md-field>
         <label>Senha</label>
         <md-input v-model="senha" type="password"></md-input>
+      </md-field>
+      <md-field>
+        <label>Confirme Sua Senha</label>
+        <md-input v-model="confirmacaoSenha" type="password"></md-input>
       </md-field>
     </template>
 
@@ -448,7 +457,7 @@
         @click="registrarModalHide"
         >Fechar</md-button
       >
-      <md-button class="md-simple md-success">Registrar</md-button>
+      <md-button @click="salvar" class="md-simple md-success">Registrar</md-button>
 
     </template>
   </modal>
@@ -458,6 +467,7 @@
 
 <script>
 import { Modal } from "@/components";
+import { log } from 'util';
 export default {
   components: {
     Modal
@@ -486,6 +496,9 @@ export default {
       registrarModal: false,
       name: null,
       email: null,
+      cpf: null,
+      senha: null,
+      confirmacaoSenha: null,
       message: null,
       image: require("@/assets/img/logos/logo.jpg"),
       endereco: {
@@ -496,17 +509,62 @@ export default {
         localidade: '',
         uf: '',
         number:''
+      },
+      doacoes: {
+      alimentacao: null,
+      religiao: null,
+      roupas: null
       }
     };
   },
   methods: {
     registrarModalHide() {
       this.registrarModal = false;
+    }
+    ,
+    salvar() {
+      var institution = {
+        name: this.name,
+        email: this.email,
+        cpf_cnpj: this.cpf,
+        passwd: this.senha,
+        address: this.endereco.logradouro +', '+ this.endereco.number +' - '+this.endereco.bairro +', '+this.endereco.localidade +', '+this.endereco.uf +' - '+ this.endereco.cep,
+        types:this.trataDoacoes(),
+        shelter: 0
+      }
+      const metodo = 'post'
+			this.$http[metodo](`/institution`, institution)
+				.then(() => {
+					this.limpar()
+					this.obterInstitutions()
+					this.mensagens.push({
+						texto: 'Operação realizada com sucesso!',
+						tipo: 'success'
+					})
+        })
+      this.registrarModalHide()
     },
-    obterInfos(cep) {
-      this.$correios.get(cep+"/json").then(res => {
+    trataDoacoes(){
+      var doacaoTratada = []
+      if (this.doacoes.alimentacao != null) {
+        doacaoTratada.push(this.doacoes.alimentacao)
+      }
+      if (this.doacoes.roupas) {
+        doacaoTratada.push(this.doacoes.roupas)
+      }
+      if (this.doacoes.religiao) {
+        doacaoTratada.push(this.doacoes.religiao)
+      }
+      return doacaoTratada.join(",")
+    }
+    ,
+    obterCep() {
+      let campCep = document.getElementById("cep");      
+      if(this.endereco.cep.length==8){ 
+      this.$correios.get(this.endereco.cep+"/json").then(res => {
         this.endereco = res.data;
       });
+      }
     }
   },
   computed: {

@@ -10,6 +10,7 @@ import MainFooter from "./layout/MainFooter.vue";
 import Instituicoes from "./views/Instituicoes.vue";
 import Instituicoes_Admin from "./views/Instituicoes_Admin.vue";
 import Region from "./views/Region.vue";
+import Eventos from "./views/Eventos.vue";
 import Links_Telefones from "./views/Links_Telefones.vue";
 import Links_Telefones_Admin from "./views/Links_Telefones_Admin.vue";
 
@@ -45,9 +46,9 @@ export default new Router({
       }
     },
     {
-      path: "/initial",
+      path: "/events",
       name: "index",
-      components: { default: Index, header: MainNavbar, footer: MainFooter },
+      components: { default: Eventos, header: MainNavbar, footer: MainFooter },
       props: {
         header: { colorOnScroll: 400 },
         footer: { backgroundColor: "black" }

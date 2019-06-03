@@ -15,7 +15,7 @@ Vue.use({
             }
         })
         Vue.prototype.$correios = axios.create({
-            baseURL: ' viacep.com.br/ws/',
+            baseURL: 'https://viacep.com.br/ws/',
             headers: {
                 "Authorization": ""
             }
