@@ -7,7 +7,7 @@
             <slot name="header"></slot>
           </div>
 
-          <div class="modal-body text-center">
+          <div class="modal-body scrollModal modal-max-size text-center">
             <slot name="body"></slot>
           </div>
 
@@ -50,7 +50,7 @@ export default {
 }
 .scrollModal{
   max-height: 75%;
-  overflow: scroll;
+  overflow: auto;
   }
 .modal-enter .modal-container,
 .modal-leave-active .modal-container {

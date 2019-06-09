@@ -36,7 +36,7 @@
           >x</md-button>
         </template>
         <template slot="body">
-          <div>
+        <md-content class="md-scrollbar">
             <b-form-group id="input-group-3" label="Instituição:" label-for="input-3">
               <b-form-select
                 id="input-3"
@@ -66,7 +66,7 @@
                 @input="recuperaCalendario()"
               ></b-form-select>
             </b-form-group>
-            <iframe class="calendar" :src="url" style="border-width:0" width="1000" height="800" frameborder="0" scrolling="no"></iframe>
+            <iframe class="calendarView" :src="url"></iframe>
             <b-form-group id="input-group-3" label="Doação:" label-for="input-3">
               <b-form-select
                 id="input-3"
@@ -79,8 +79,8 @@
 			        <label>Data:</label>
 			        <md-input v-model="selected_date" type="text"></md-input>
 			      </md-field>
-          </div>
-        </template>
+          </md-content>
+          </template>
         <template slot="footer">
           <md-button class="md-danger md-simple" @click="newEventHide">Cancelar</md-button>
           <md-button @click="salvar" class="md-simple md-success">Criar Região</md-button>
@@ -237,5 +237,9 @@ export default {
 #app h1 {
   text-align: center;
   margin: 50px;
+}
+.calendarView{
+  height: 800px !important;
+  width: 1000px;
 }
 </style>
