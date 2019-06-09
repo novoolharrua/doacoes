@@ -40,7 +40,7 @@
             <div
               class="md-layout-item md-size-90 md-xsmall-size-100 mx-auto "
             >
-              <h2 class="title ">Logo do Novo Olhar Rua
+              <h2 class="title ">
               Unidos Para Ajudar a População em Situação de Rua</h2>
               <h5 class="description">
                 O que todos nós precisamos para agir em prol da população de rua é termos um Novo Olhar. Não um olhar de administrador de empresas, de um homem público, de um mantenedor da ordem ou de quem simplesmente doa alimentos, mas SIM um olhar empático de quem se imagina em situação de rua..

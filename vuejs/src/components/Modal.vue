@@ -2,7 +2,7 @@
   <transition name="modal">
     <div class="modal-mask">
       <div class="modal-wrapper">
-        <div class="modal-container" v-click-outside="closeModal">
+        <div class="modal-container">
           <div class="modal-header">
             <slot name="header"></slot>
           </div>
@@ -48,7 +48,10 @@ export default {
 .modal-leave-active {
   opacity: 0;
 }
-
+.scrollModal{
+  max-height: 75%;
+  overflow: scroll;
+  }
 .modal-enter .modal-container,
 .modal-leave-active .modal-container {
   -webkit-transform: scale(1.1);

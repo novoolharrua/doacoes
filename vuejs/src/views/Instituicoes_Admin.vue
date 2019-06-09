@@ -41,11 +41,15 @@
             <label>Email da Instituição</label>
             <md-input v-model="institution_selected.email" type="text"></md-input>
           </md-field>
+            <md-radio v-model="institution_selected.status" value="NEW">Nova</md-radio>
+            <md-radio v-model="institution_selected.status" value="ACTIVE">Aceita</md-radio>
+            <md-radio v-model="institution_selected.status" value="PENDING">Pendente</md-radio>
+            <md-radio v-model="institution_selected.status" value="DENIED">Rejeitada</md-radio>
         </template>
 
         <template slot="footer">
           <md-button class="md-danger md-simple" @click="editInstitutionHide">Fechar</md-button>
-          <!-- <md-button class="md-simple md-warning" @click="editar">Editar</md-button> -->
+          <md-button class="md-simple md-warning" @click="editar">Editar</md-button>
           <md-button class="md-simple md-danger" @click="excluir(institution_selected.id)">Excluir</md-button>
         </template>
       </modal>
@@ -65,21 +69,12 @@ export default {
       mensagens: [],
       institutions: this.obterInstitutions(),
       fields: ["name", "address", "types", "status", "visualizar"],
-      institution_selected: null,
-      institution: {
-        name: "",
-        address: "",
-        email: "",
-        passwd: "",
-        types: "",
-        shelter: 0
-      }
+      institution_selected: null
     };
   },
   methods: {
     editInstitutionsModal(data) {
       this.institution_selected = null;
-      console.log(data);
       this.$http.get("institution/" + data.id).then(res => {
         this.institution_selected = res.data;
         this.editInstitution = true;
@@ -114,12 +109,13 @@ export default {
           });
         });
     },
-    salvar() {
-      this.institution.types = this.institution.types.join(",");
-
-      const metodo = "post";
-      this.$http[metodo](`/institution`, this.institution).then(() => {
-        this.limpar();
+    editar() {
+      const metodo = "put";
+      this.institution_selected.types = this.institution_selected.types.join(",")
+      var id = this.institution_selected.id
+      delete this.institution_selected.created_at
+      delete this.institution_selected.id
+      this.$http[metodo](`/institution/`+id, this.institution_selected).then(() => {
         this.obterInstitutions();
         this.mensagens.push({
           texto: "Operação realizada com sucesso!",
