@@ -139,6 +139,7 @@ export default {
     Modal
   },
   data() {
+    this.autenticaSessao()
     return {
       newLink: false,
       editLink: false,
@@ -186,6 +187,21 @@ export default {
             tipo: "danger"
           });
         });
+    },
+    autenticaSessao(){
+      if(localStorage.logged_institution && localStorage.token){
+        this.$http.get("institution/validate_token?token="+localStorage.token).then(res => {
+          this.$http.get("institution/" + this.selected_institution).then(res => {
+            this.$store.state.logged_institution = res.data;
+          });
+        }).catch(err => {
+          this.flashMessage.show({status: 'error', title: 'Error', message: this.$store.state.error.sessao})
+          this.$router.push('/');
+        });
+      }else{
+          this.flashMessage.show({status: 'error', title: 'Error', message: this.$store.state.error.sessao})
+        this.$router.push('/');
+      }
     },
     editar() {
       this.excluir(this.info_selected.id);

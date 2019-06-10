@@ -32,43 +32,6 @@
             >
 					</div>
         </div>
-			<!-- CRIAR NOVA REGIAO MODAL -->
-			<modal v-if="newRegion" @close="newRegionHide" >
-					<template slot="header">
-			      <h4 class="modal-title"> Criar Região</h4>
-			      <md-button
-			        class="md-simple md-just-icon md-round modal-default-button"
-			        @click="newRegionHide"
-			      >x
-			      </md-button>
-			    </template>
-			
-			    <template slot="body">
-			      <md-field>
-			        <label>Nome da Região</label>
-			        <md-input v-model="region.name" type="text"></md-input>
-			      </md-field>
-			      <md-field>
-			        <label>Endereço da Região</label>
-			        <md-input v-model="region.address" type="text"></md-input>
-			      </md-field>      
-			      <md-field>
-			        <label>Numero de Pessoas na Região</label>
-			        <md-input v-model="region.population" type="text"></md-input>
-			      </md-field>
-			    </template>
-			
-			    <template slot="footer">
-			      
-						<md-button
-							class="md-danger md-simple"
-			        @click="newRegionHide"
-			        >Cancelar</md-button
-			      >
-			      <md-button @click="salvar" class="md-simple md-success"> Criar Região</md-button>
-						
-			    </template>
-			  </modal>
 				<!-- EDITAR REGIAO ATUAL -->
 				<modal v-if="editRegion" @close="editRegionHide">
 			    <template slot="header">
@@ -81,18 +44,7 @@
 			    </template>
 			
 			    <template slot="body">
-			      <md-field>
-			        <label>Nome da Região</label>
-			        <md-input v-model="region_selected.name" type="text"></md-input>
-			      </md-field>
-			      <md-field>
-			        <label>Endereço da Região</label>
-			        <md-input v-model="region_selected.address" type="text"></md-input>
-			      </md-field>      
-			      <md-field>
-			        <label>Numero de Pessoas na Região</label>
-			        <md-input v-model="region_selected.population" type="text"></md-input>
-			      </md-field>
+			    
 			    </template>
 			
 			    <template slot="footer">

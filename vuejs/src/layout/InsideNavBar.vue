@@ -3,7 +3,6 @@
     id="toolbar"
     md-elevation="0"
     class="md-white"
-    :class="extraNavClasses"
     :color-on-scroll="colorOnScroll"
   >
     <div class="md-toolbar-row md-collapse-lateral">
@@ -30,33 +29,38 @@
 
               <md-list-item
                 href="javascript:void(0)"
-                @click="scrollToElement()"
               >
-               <p>Inicio</p>
+               <a href="#/">
+                <p>Inicio</p>
+              </a>
               </md-list-item>
-              <md-list-item
+              <md-list-item v-if="this.$store.state.logged_institution!=null"
                 href="javascript:void(0)"
-                @click="scrollToElement()"
               >
-               <p>Quem Somos</p>
+              <a href="#/events">
+                <p>Eventos</p>
+              </a>
               </md-list-item>
-              <md-list-item
+              <md-list-item v-if="this.status == 1"
                 href="javascript:void(0)"
-                @click="scrollToElement()"
               >
-               <p>Apoiadores</p>
+              <a href="#/admin_institution">
+                <p>Gerenciar Instituições</p>
+              </a>
               </md-list-item>
-              <md-list-item
+              <md-list-item v-if="this.status == 1"
                 href="javascript:void(0)"
-                @click="scrollToElement()"
               >
-               <p>Patriocinadores</p>
+              <a href="#/admin_info">
+                <p>Gerenciar Informações</p>
+              </a>
               </md-list-item>
-              <md-list-item
+              <md-list-item v-if="this.status == 1"
                 href="javascript:void(0)"
-                @click="scrollToElement()"
               >
-               <p>Contato</p>
+              <a href="#/admin_region">
+                <p>Gerenciar Regiões</p>
+              </a>
               </md-list-item>
               <li class="md-list-item">
                 <a
@@ -70,25 +74,12 @@
                         class="md-button md-button-link md-white md-simple"
                         data-toggle="dropdown"
                       >
-                        <p>Informações Uteis</p><i></i>
+                        <p class="color-white">Informações Uteis</p>
                       </md-button>
                       <ul class="dropdown-menu dropdown-with-icons">
                         <li>
-                          <a href="#/landing">
-    
-                            <p>Landing Page</p>
-                          </a>
-                        </li>
-                        <li>
-                          <a href="#/login">
-    
-                            <p>Login Page</p>
-                          </a>
-                        </li>
-                        <li>
-                          <a href="#/profile">
-    
-                            <p>Profile Page</p>
+                          <a href="#/links">
+                            <p>Links Uteis</p>
                           </a>
                         </li>
                       </ul>
@@ -145,9 +136,10 @@ export default {
     }
   },
   data() {
+    this.autenticaSessao()
     return {
-      extraNavClasses: "",
-      toggledClass: false
+      toggledClass: false,
+      status: null
     };
   },
   computed: {
@@ -155,8 +147,29 @@ export default {
       const excludedRoutes = ["login", "landing", "profile"];
       return excludedRoutes.every(r => r !== this.$route.name);
     }
+    
   },
   methods: {
+    autenticaSessao(){
+      if(localStorage.logged_institution && localStorage.token){
+        this.$http.get("institution/validate_token?token="+localStorage.token).then(res => {
+          this.$http.get("institution/" + localStorage.logged_institution).then(res => {
+            this.$store.state.logged_institution = res.data;
+            this.gerenciaNavBar()
+          });
+        }).catch(err => {
+          this.gerenciaNavBar()
+        });
+      }
+    },
+    gerenciaNavBar(){
+      if(this.$store.state.logged_institution!=null){
+        this.status = this.$store.state.logged_institution.admin
+      }else{
+        this.status = 3
+      }
+      console.log(this.status);
+    },
     bodyClick() {
       let bodyClick = document.getElementById("bodyClick");
 
@@ -176,21 +189,6 @@ export default {
       this.NavbarStore.showNavbar = !this.NavbarStore.showNavbar;
       this.toggledClass = !this.toggledClass;
       this.bodyClick();
-    },
-    handleScroll() {
-      let scrollValue =
-        document.body.scrollTop || document.documentElement.scrollTop;
-      let navbarColor = document.getElementById("toolbar");
-      this.currentScrollValue = scrollValue;
-      if (this.colorOnScroll > 0 && scrollValue > this.colorOnScroll) {
-        this.extraNavClasses = `md-${this.type}`;
-        navbarColor.classList.remove("md-transparent");
-      } else {
-        if (this.extraNavClasses) {
-          this.extraNavClasses = "";
-          navbarColor.classList.add("md-transparent");
-        }
-      }
     },
     scrollListener() {
       resizeThrottler(this.handleScroll);

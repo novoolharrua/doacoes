@@ -7,5 +7,6 @@
       </div>
       <router-view name="footer" />
     </div>
+    <FlashMessage></FlashMessage>
   </div>
 </template>

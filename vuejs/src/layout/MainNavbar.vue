@@ -2,8 +2,7 @@
   <md-toolbar
     id="toolbar"
     md-elevation="0"
-    class="md-transparent md-absolute"
-    :class="extraNavClasses"
+    class="md-white md-absolute"
     :color-on-scroll="colorOnScroll"
   >
     <div class="md-toolbar-row md-collapse-lateral">
@@ -70,25 +69,12 @@
                         class="md-button md-button-link md-white md-simple"
                         data-toggle="dropdown"
                       >
-                        <p>Informações Uteis</p><i></i>
+                        <p class="color-white">Informações Uteis</p>
                       </md-button>
                       <ul class="dropdown-menu dropdown-with-icons">
                         <li>
-                          <a href="#/landing">
-    
-                            <p>Landing Page</p>
-                          </a>
-                        </li>
-                        <li>
-                          <a href="#/login">
-    
-                            <p>Login Page</p>
-                          </a>
-                        </li>
-                        <li>
-                          <a href="#/profile">
-    
-                            <p>Profile Page</p>
+                          <a href="#/links">
+                            <p>Links Uteis</p>
                           </a>
                         </li>
                       </ul>
@@ -96,6 +82,13 @@
                   </div>
                 </a>
               </li>
+               <md-list-item v-if="this.status != this.$store.state.logged_institution"
+                href="javascript:void(0)"
+              >
+              <a href="#/instituicao/eventos">
+               <p>Proximos Eventos</p>
+              </a>
+              </md-list-item>
             </md-list>
           </div>
         </div>
@@ -124,6 +117,7 @@ export default {
     MobileMenu
   },
   props: {
+    icon: require("@/assets/img/team.png"),
     type: {
       type: String,
       default: "white",
@@ -145,8 +139,8 @@ export default {
     }
   },
   data() {
+    this.autenticaSessao()
     return {
-      extraNavClasses: "",
       toggledClass: false
     };
   },
@@ -155,8 +149,21 @@ export default {
       const excludedRoutes = ["login", "landing", "profile"];
       return excludedRoutes.every(r => r !== this.$route.name);
     }
+    
   },
   methods: {
+    autenticaSessao(){
+      if(localStorage.logged_institution && localStorage.token){
+        this.$http.get("institution/validate_token?token="+localStorage.token).then(res => {
+          this.$http.get("institution/" + localStorage.logged_institution).then(res => {
+            this.$store.state.logged_institution = res.data;
+            this.gerenciaNavBar()
+          });
+        }).catch(err => {
+          this.gerenciaNavBar()
+        });
+      }
+    },
     bodyClick() {
       let bodyClick = document.getElementById("bodyClick");
 
@@ -176,21 +183,6 @@ export default {
       this.NavbarStore.showNavbar = !this.NavbarStore.showNavbar;
       this.toggledClass = !this.toggledClass;
       this.bodyClick();
-    },
-    handleScroll() {
-      let scrollValue =
-        document.body.scrollTop || document.documentElement.scrollTop;
-      let navbarColor = document.getElementById("toolbar");
-      this.currentScrollValue = scrollValue;
-      if (this.colorOnScroll > 0 && scrollValue > this.colorOnScroll) {
-        this.extraNavClasses = `md-${this.type}`;
-        navbarColor.classList.remove("md-transparent");
-      } else {
-        if (this.extraNavClasses) {
-          this.extraNavClasses = "";
-          navbarColor.classList.add("md-transparent");
-        }
-      }
     },
     scrollListener() {
       resizeThrottler(this.handleScroll);

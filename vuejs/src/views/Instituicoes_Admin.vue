@@ -64,6 +64,7 @@ export default {
     Modal
   },
   data() {
+    this.autenticaSessao()
     return {
       editInstitution: false,
       mensagens: [],
@@ -79,6 +80,21 @@ export default {
         this.institution_selected = res.data;
         this.editInstitution = true;
       });
+    },
+    autenticaSessao(){
+      if(localStorage.logged_institution && localStorage.token){
+        this.$http.get("institution/validate_token?token="+localStorage.token).then(res => {
+          this.$http.get("institution/" + this.selected_institution).then(res => {
+            this.$store.state.logged_institution = res.data;
+          });
+        }).catch(err => {
+          this.flashMessage.show({status: 'error', title: 'Error', message: this.$store.state.error.sessao})
+          this.$router.push('/');
+        });
+      }else{
+          this.flashMessage.show({status: 'error', title: 'Error', message: this.$store.state.error.sessao})
+        this.$router.push('/');
+      }
     },
     limpar() {
       (this.name = ""),

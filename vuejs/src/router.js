@@ -1,11 +1,8 @@
 import Vue from "vue";
 import Router from "vue-router";
-import Index from "./views/Index.vue";
 import Inicio from "./views/Inicio.vue";
-import Login from "./views/Login.vue";
-import Profile from "./views/Profile.vue";
-import MainNavbar from "./layout/MainNavbar.vue";
-import SecondNavBar from "./layout/SecondNavBar.vue"
+import MainNavbar from "./layout/MainNavBar.vue";
+import InsideNavbar from "./layout/InsideNavBar.vue";
 import MainFooter from "./layout/MainFooter.vue";
 import Instituicoes_Admin from "./views/Instituicoes_Admin.vue";
 import Region from "./views/Region.vue";
@@ -17,18 +14,9 @@ Vue.use(Router);
 
 export default new Router({
     routes: [{
-            path: "/",
-            name: "index",
-            components: { default: Index, header: MainNavbar, footer: MainFooter },
-            props: {
-                header: { colorOnScroll: 400 },
-                footer: { backgroundColor: "black" }
-            }
-        },
-        {
-            path: "/region",
-            name: "region",
-            components: { default: Region, header: SecondNavBar, footer: MainFooter },
+            path: "/admin_region",
+            name: "admin_region",
+            components: { default: Region, header: InsideNavbar, footer: MainFooter },
             props: {
                 header: { colorOnScroll: 400 },
                 footer: { backgroundColor: "black" }
@@ -36,16 +24,16 @@ export default new Router({
         },
         {
             path: "/events",
-            name: "index",
-            components: { default: Eventos, header: SecondNavBar, footer: MainFooter },
+            name: "events",
+            components: { default: Eventos, header: InsideNavbar, footer: MainFooter },
             props: {
                 header: { colorOnScroll: 400 },
                 footer: { backgroundColor: "black" }
             }
         },
         {
-            path: "/landing",
-            name: "inicio",
+            path: "/",
+            name: "index",
             components: { default: Inicio, header: MainNavbar, footer: MainFooter },
             props: {
                 header: { colorOnScroll: 400 },
@@ -53,9 +41,9 @@ export default new Router({
             }
         },
         {
-            path: "/instituicoes_admin",
-            name: "instituicoes admin",
-            components: { default: Instituicoes_Admin, header: SecondNavBar, footer: MainFooter },
+            path: "/admin_institution",
+            name: "admin_institution",
+            components: { default: Instituicoes_Admin, header: InsideNavbar, footer: MainFooter },
             props: {
                 header: { colorOnScroll: 400 },
                 footer: { backgroundColor: "black" }
@@ -64,33 +52,16 @@ export default new Router({
         {
             path: "/links",
             name: "links",
-            components: { default: Links_Telefones, header: SecondNavBar, footer: MainFooter },
+            components: { default: Links_Telefones, header: InsideNavbar, footer: MainFooter },
             props: {
                 header: { colorOnScroll: 400 },
                 footer: { backgroundColor: "black" }
             }
         },
         {
-            path: "/links_admin",
-            name: "links admin",
-            components: { default: Links_Telefones_Admin, header: SecondNavBar, footer: MainFooter },
-            props: {
-                header: { colorOnScroll: 400 },
-                footer: { backgroundColor: "black" }
-            }
-        },
-        {
-            path: "/login",
-            name: "login",
-            components: { default: Login, header: MainNavbar, footer: MainFooter },
-            props: {
-                header: { colorOnScroll: 400 }
-            }
-        },
-        {
-            path: "/profile",
-            name: "profile",
-            components: { default: Profile, header: MainNavbar, footer: MainFooter },
+            path: "/admin_info",
+            name: "admin_info",
+            components: { default: Links_Telefones_Admin, header: InsideNavbar, footer: MainFooter },
             props: {
                 header: { colorOnScroll: 400 },
                 footer: { backgroundColor: "black" }

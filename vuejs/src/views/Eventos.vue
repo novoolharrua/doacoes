@@ -4,8 +4,29 @@
     <div class="main main-raised">
       <div class="md-layout-item md-size-66 md-xsmall-size-100 mx-auto">
         <h2 class="text-center title">Eventos</h2>
+        
         <div class="mx-auto text-center">
           <b-table striped hover :fields="fields" :items="eventos">
+            <template slot="Tipo" slot-scope="data">
+              <p v-if="data.item.type == 'FOOD'"> Alimentos </p>
+              <p v-if="data.item.type == 'CLOTHING'"> Roupas </p>
+              <p v-if="data.item.type == 'RELIGION'"> Religiosa </p>
+              <p v-if="data.item.type == 'OTHERS'"> Outros </p>
+            </template>
+            <template slot="Região" slot-scope="data">
+              <p>{{data.item.region.region_name}}</p>
+            </template>
+            <template slot="Endereço" slot-scope="data">
+              <p>{{data.item.region.region_address}}
+              </p>
+              <md-button
+              class="md-success md-sm"
+              target="_blank"
+              > ver no maps <img class="icone" src="https://img.icons8.com/color/48/000000/google-maps.png"></md-button>
+            </template>
+            <template slot="Data" slot-scope="data">
+                {{data.item.date}}
+            </template>
             <template slot="visualizar" slot-scope="data">
               <md-button
                 class="md-success md-sm"
@@ -26,10 +47,10 @@
           >Criar Eventos</md-button>
         </div>
       </div>
-      <!-- CRIAR NOVA REGIAO MODAL -->
+      <!-- CRIAR NOVO EVENTO MODAL -->
       <modal v-if="newEvent" @close="newEventHide">
         <template slot="header">
-          <h4 class="modal-title">Criar Região</h4>
+          <h4 class="modal-title">Criar Evento</h4>
           <md-button
             class="md-simple md-just-icon md-round modal-default-button"
             @click="newEventHide"
@@ -45,6 +66,7 @@
                 value-field="id"
                 text-field="name"
                 required
+                disabled
               ></b-form-select>
             </b-form-group>
             <b-form-group id="input-group-3" label="Região:" label-for="input-3">
@@ -83,13 +105,13 @@
           </template>
         <template slot="footer">
           <md-button class="md-danger md-simple" @click="newEventHide">Cancelar</md-button>
-          <md-button @click="salvar" class="md-simple md-success">Criar Região</md-button>
+          <md-button @click="salvar" class="md-simple md-success">Criar Evento</md-button>
         </template>
       </modal>
       <!-- EDITAR REGIAO ATUAL -->
       <modal v-if="editEvent" @close="editEventHide">
         <template slot="header">
-          <h4 class="modal-title">Visualizar Região</h4>
+          <h4 class="modal-title">Visualizar Evento</h4>
           <md-button
             class="md-simple md-just-icon md-round modal-default-button"
             @click="editEventHide"
@@ -97,24 +119,57 @@
         </template>
 
         <template slot="body">
-          <md-field>
-            <label>Nome da Região</label>
-            <md-input v-model="region_selected.name" type="text"></md-input>
-          </md-field>
-          <md-field>
-            <label>Endereço da Região</label>
-            <md-input v-model="region_selected.address" type="text"></md-input>
-          </md-field>
-          <md-field>
-            <label>Numero de Pessoas na Região</label>
-            <md-input v-model="region_selected.population" type="text"></md-input>
-          </md-field>
+       <md-content class="md-scrollbar">
+            <b-form-group id="input-group-3" label="Instituição:" label-for="input-3">
+              <b-form-select
+                id="input-3"
+                v-model="selected_institution"
+                :options="institutions"
+                value-field="id"
+                text-field="name"
+                required
+                disabled
+              ></b-form-select>
+            </b-form-group>
+            <b-form-group id="input-group-3" label="Região:" label-for="input-3">
+              <b-form-select
+                id="input-3"
+                v-model="selected_region"
+                :options="regions"
+                value-field="id_region"
+                text-field="name"
+                required
+              ></b-form-select>
+            </b-form-group>
+            <b-form-group id="input-group-3" label="Doação:" label-for="input-3">
+              <b-form-select
+                id="input-3"
+                v-model="selected_type"
+                :options="obterTipos()"
+                required
+                @input="recuperaCalendario()"
+              ></b-form-select>
+            </b-form-group>
+            <iframe class="calendarView" :src="url"></iframe>
+            <b-form-group id="input-group-3" label="Doação:" label-for="input-3">
+              <b-form-select
+                id="input-3"
+                v-model="selected_turn"
+                :options="obterTurnos()"
+                required
+              ></b-form-select>
+            </b-form-group>
+              <md-field>
+			        <label>Data:</label>
+			        <md-input v-model="selected_date" type="text"></md-input>
+			      </md-field>
+          </md-content>
         </template>
 
         <template slot="footer">
           <md-button class="md-danger md-simple" @click="editEventHide">Fechar</md-button>
           <md-button class="md-simple md-warning" @click="editar">Editar</md-button>
-          <md-button class="md-simple md-danger" @click="excluir(region_selected.id_region)">Excluir</md-button>
+          <md-button class="md-simple md-danger" @click="excluir(event_selected.id)">Excluir</md-button>
         </template>
       </modal>
     </div>
@@ -128,12 +183,14 @@ export default {
     Modal
   },
   data() {
+    this.autenticaSessao();
     return {
       newEvent: false,
       editEvent: false,
-      fields: ["type", "region", "date", "visualizar"],
+      fields: ["Tipo", "Região", "Endereço", "Data", "visualizar"],
       mensagens: [],
       id_region: "",
+      logged_institution: null,
       eventos: this.obterEventos(),
       regions: this.obterRegions(),
       institutions: this.obterInstitutions(),
@@ -182,7 +239,7 @@ export default {
       this.obterEventos();
     },
     obterEventos() {
-      this.$http.get("event").then(res => {
+      this.$http.get("event?iid="+localStorage.logged_institution).then(res => {
         this.eventos = res.data.data;
       });
     },
@@ -191,8 +248,23 @@ export default {
     },
     obterTurnos() {
         return [{ value:"M",text: "Manhã"}, {value:"T",text: "Tarde"}, {value:"N",text: "Noite"}]
-    }
-    ,
+    },
+    autenticaSessao(){
+      if(localStorage.logged_institution && localStorage.token){
+        this.$http.get("institution/validate_token?token="+localStorage.token).then(res => {
+          this.selected_institution = localStorage.logged_institution;
+          this.$http.get("institution/" + this.selected_institution).then(res => {
+            this.$store.state.logged_institution = res.data;
+          });
+        }).catch(err => {
+          this.flashMessage.show({status: 'error', title: 'Error', message: this.$store.state.error.sessao})
+          this.$router.push('/');
+        });
+      }else{
+          this.flashMessage.show({status: 'error', title: 'Error', message: this.$store.state.error.sessao})
+        this.$router.push('/');
+      }
+    },
     obterInstitutions() {
       this.$http.get("institution").then(res => {
         this.institutions = res.data;
@@ -206,7 +278,7 @@ export default {
 			this.$http.get('region/'+this.selected_region).then(res => {
         this.region = res.data;
         this.region = this.region.calendars.filter(this.filtrarCalendario)[0];
-        this.url = "https://calendar.google.com/calendar/b/1/embed?height=600&amp;wkst=1&amp;bgcolor=%23ffffff&amp;ctz=America%2FSao_Paulo&amp;"+"src="+this.region.gcloud_id+ "&amp;color=%237CB342&amp;color=%239E69AF&amp;color=%23009688&amp;color=%23EF6C00&amp;showTitle=0&amp;showDate=1&amp;showPrint=0&amp;showTabs=1&amp;showTz=0&amp;showCalendars=0"
+        this.url = "https://calendar.google.com/calendar/b/1/embed?height=600&wkst=1&bgcolor=%23ffffff&ctz=America%2FSao_Paulo&"+"src="+ this.region.gcloud_id+ "&color=%237CB342&color=%239E69AF&color=%23009688&color=%23EF6C00&showTitle=0&showDate=1&showPrint=0&showTabs=1&showTz=0&showCalendars=0"
         console.log(this.region.gcloud_id);
      });          
 		},
@@ -215,9 +287,41 @@ export default {
         this.regions = res.data.data;
       });
     },
+    editar(){
+      this.salvar()
+      this.excluir(this.event_selected.id)
+    },
+    excluir(id) {
+      this.$http
+        .delete(`/event/${id}`)
+        .then(() => {
+          this.editEventHide();
+          this.obterEventos()
+        });
+    },
+    limpar(){
+      this.event_selected = null
+      this.selected_region = null
+      this.selected_type = null
+      this.selected_turn = null
+      this.selected_date = null
+    }
+    ,
     editEventHide() {
       this.editEvent = false;
+      this.limpar();
     },
+    editEventModal(data){
+      this.event_selected = data
+      this.selected_institution = data.institution.institution_id
+      this.selected_region = data.region.region_id
+      this.selected_type = data.type
+      this.selected_turn = data.period
+      this.selected_date = data.date
+      this.recuperaCalendario();
+      this.editEvent = true;
+    }
+    ,
     newEventHide() {
       this.newEvent = false;
     }

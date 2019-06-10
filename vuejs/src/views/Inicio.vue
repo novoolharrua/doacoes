@@ -20,7 +20,7 @@
               <md-button
               class="md-success md-lg"
               target="_blank"
-                @click="registrarModal = true"
+                @click="loginModal = true"
               > Já Sou Doador</md-button
             >
 
@@ -31,6 +31,7 @@
     <div class="main main-raised-margin">
       <div class="section">
         <div class="container-person">
+          
           <div class="md-layout ">
           <div class="md-layout-item text-right ml-auto">
                 <img :src="image" class="rounded size-img" />
@@ -462,6 +463,39 @@
     </template>
   </modal>
   <!--MODAL LOGIN-->
+  <modal v-if="loginModal" @close="loginModalHide">
+    <template slot="header">
+      <h4 class="modal-title">Registre-se</h4>
+
+
+      <md-button
+        class="md-simple md-just-icon md-round modal-default-button"
+        @click="loginModalHide"
+      >x
+      </md-button>
+    </template>
+
+    <template slot="body">
+      <md-field>
+        <label>E-Mail</label>
+        <md-input v-model="email_login" type="email"></md-input>
+      </md-field>      
+      <md-field>
+        <label>Senha</label>
+        <md-input v-model="senha_login" type="password"></md-input>
+      </md-field>
+    </template>
+
+    <template slot="footer">
+      <md-button
+        class="md-danger md-simple"
+        @click="loginModalHide"
+        >Fechar</md-button
+      >
+      <md-button @click="efetuaLogin" class="md-simple md-success">Login</md-button>
+
+    </template>
+  </modal>
   </div>
 </template>
 
@@ -494,12 +528,16 @@ export default {
   data() {
     return {
       registrarModal: false,
+      loginModal: false,
       name: null,
       email: null,
       cpf: null,
       senha: null,
+      email_login:null,
+      senha_login: null,
       confirmacaoSenha: null,
       message: null,
+      institutions: null,
       image: require("@/assets/img/logos/logo.jpg"),
       endereco: {
         cep: '',
@@ -520,6 +558,9 @@ export default {
   methods: {
     registrarModalHide() {
       this.registrarModal = false;
+    },
+    loginModalHide(){
+      this.loginModal = false;
     }
     ,
     salvar() {
@@ -544,6 +585,23 @@ export default {
         })
       this.registrarModalHide()
     },
+    filtraInstituicao(value){
+      if (value.email == this.email_login) {
+       return value;
+      }
+    },
+    efetuaLogin(){
+      this.$http.get("institution/auth?email="+this.email_login+"&passwd="+this.senha_login).then(res => {
+        localStorage.token = res.data.token;
+        var aux = null;
+        this.$http.get("institution").then(res => {
+          this.institutions = res.data;
+          localStorage.logged_institution = this.institutions.filter(this.filtraInstituicao)[0].id;
+          this.institutions = null;
+          this.$router.push('events');
+        });
+      });
+    },
     trataDoacoes(){
       var doacaoTratada = []
       if (this.doacoes.alimentacao != null) {
@@ -565,6 +623,13 @@ export default {
         this.endereco = res.data;
       });
       }
+    },
+    recuperaToken(){
+      if (this.logged_institution != null) {
+        return this.$store.state.token
+      } else {
+        
+      }
     }
   },
   computed: {
@@ -572,6 +637,9 @@ export default {
       return {
         backgroundImage: `url(${this.header})`,
       };
+    },
+    logged_institution(){
+      return this.$store.state.logged_institution
     }
   }
 };
