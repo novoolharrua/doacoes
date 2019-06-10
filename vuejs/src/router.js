@@ -1,13 +1,13 @@
 import Vue from "vue";
 import Router from "vue-router";
 import Inicio from "./views/Inicio.vue";
-import MainNavbar from "./layout/MainNavBar.vue";
 import InsideNavbar from "./layout/InsideNavBar.vue";
 import MainFooter from "./layout/MainFooter.vue";
 import Instituicoes_Admin from "./views/Instituicoes_Admin.vue";
 import Region from "./views/Region.vue";
 import Eventos from "./views/Eventos.vue";
 import Links_Telefones from "./views/Links_Telefones.vue";
+import MainNavbar from "./layout/MainNavbar.vue";
 import Links_Telefones_Admin from "./views/Links_Telefones_Admin.vue";
 
 Vue.use(Router);

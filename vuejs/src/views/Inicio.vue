@@ -576,12 +576,7 @@ export default {
       const metodo = 'post'
 			this.$http[metodo](`/institution`, institution)
 				.then(() => {
-					this.limpar()
-					this.obterInstitutions()
-					this.mensagens.push({
-						texto: 'Operação realizada com sucesso!',
-						tipo: 'success'
-					})
+          this.flashMessage.show({status: 'success', title: 'Sucesso', message: this.$store.state.success.cadastro_instituicao})          
         })
       this.registrarModalHide()
     },
@@ -598,9 +593,13 @@ export default {
           this.institutions = res.data;
           localStorage.logged_institution = this.institutions.filter(this.filtraInstituicao)[0].id;
           this.institutions = null;
+          this.flashMessage.show({status: 'success', title: 'Sucesso', message: this.$store.state.success.generico})          
           this.$router.push('events');
         });
-      });
+      }).catch(err => {
+          this.flashMessage.show({status: 'error', title: 'Error', message: this.$store.state.error.usuario_senha_invalida})
+          this.$router.push('/');
+        });
     },
     trataDoacoes(){
       var doacaoTratada = []

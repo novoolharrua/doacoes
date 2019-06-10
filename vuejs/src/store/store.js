@@ -7,7 +7,7 @@ export default new Vuex.Store({
     state: {
         logged_institution: null,
         token: null,
-        sucesso: {
+        success: {
             generico: "Sucesso.",
             criar_regiao: "Região criada com sucesso.",
             criar_link_util: "Informação util criada com sucesso",

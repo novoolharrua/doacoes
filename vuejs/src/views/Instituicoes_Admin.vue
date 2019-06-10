@@ -131,13 +131,15 @@ export default {
       var id = this.institution_selected.id
       delete this.institution_selected.created_at
       delete this.institution_selected.id
+      delete this.institution_selected.passwd
       this.$http[metodo](`/institution/`+id, this.institution_selected).then(() => {
         this.obterInstitutions();
-        this.mensagens.push({
-          texto: "Operação realizada com sucesso!",
-          tipo: "success"
+        this.editInstitutionHide();
+          this.flashMessage.show({status: 'success', title: 'Sucesso', message: this.$store.state.success.editar_instituicao})          
+      }).catch(err => {
+          this.flashMessage.show({status: 'error', title: 'Error', message: this.$store.state.error.editar_instituicao})
+          this.editInstitutionHide();
         });
-      });
     },
     obterInstitutions() {
       this.$http.get("institution").then(res => {
