@@ -465,7 +465,7 @@
   <!--MODAL LOGIN-->
   <modal v-if="loginModal" @close="loginModalHide">
     <template slot="header">
-      <h4 class="modal-title">Registre-se</h4>
+      <h4 class="modal-title">Login</h4>
 
 
       <md-button

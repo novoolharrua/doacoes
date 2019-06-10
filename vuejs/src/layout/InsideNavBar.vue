@@ -87,6 +87,13 @@
                   </div>
                 </a>
               </li>
+              <md-list-item v-if="this.$store.state.logged_institution!=null"
+                href="javascript:void(0)"
+              >
+              <a @click="logout()">
+                <p>Logout</p>
+              </a>
+              </md-list-item>
             </md-list>
           </div>
         </div>
@@ -169,6 +176,11 @@ export default {
         this.status = 3
       }
       console.log(this.status);
+    },
+    logout(){
+      localStorage.logged_institution = null;
+      localStorage.token = null;
+      this.autenticaSessao();
     },
     bodyClick() {
       let bodyClick = document.getElementById("bodyClick");

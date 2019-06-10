@@ -7,7 +7,7 @@ import Instituicoes_Admin from "./views/Instituicoes_Admin.vue";
 import Region from "./views/Region.vue";
 import Eventos from "./views/Eventos.vue";
 import Links_Telefones from "./views/Links_Telefones.vue";
-import MainNavbar from "./layout/MainNavbar.vue";
+import MainNavbar from "./layout/MainNavBar.vue";
 import Links_Telefones_Admin from "./views/Links_Telefones_Admin.vue";
 
 Vue.use(Router);

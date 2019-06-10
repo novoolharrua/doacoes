@@ -85,7 +85,7 @@
                <md-list-item v-if="this.status != this.$store.state.logged_institution"
                 href="javascript:void(0)"
               >
-              <a href="#/instituicao/eventos">
+              <a href="#/events">
                <p>Proximos Eventos</p>
               </a>
               </md-list-item>
@@ -163,6 +163,11 @@ export default {
           this.gerenciaNavBar()
         });
       }
+    },
+    logout(){
+      localStorage.logged_institution = null;
+      localStorage.token = null;
+      this.autenticaSessao();
     },
     bodyClick() {
       let bodyClick = document.getElementById("bodyClick");

@@ -6,6 +6,21 @@
         <h2 class="text-center title">Gerenciamento de Instituições</h2>
         <div class="mx-auto text-center">
           <b-table striped hover :fields="fields" :items="institutions">
+            <template slot="Nome" slot-scope="data">
+              <p>{{data.item.name}}</p>
+              </template>
+            <template slot="Endereço" slot-scope="data">
+              <p>{{data.item.address}}</p>
+            </template>
+            <template slot="Tipos" slot-scope="data">
+              <p>{{recuperaTipos(data.item.types)}}</p>
+            </template>
+            <template slot="Estado" slot-scope="data">
+              <p v-if="data.item.status == 'NEW'"> Nova </p>
+              <p v-if="data.item.status == 'ACTIVE'"> Ativa </p>
+              <p v-if="data.item.status == 'PENDING'"> Pendente </p>
+              <p v-if="data.item.status == 'DENIED'"> Rejeitada </p>
+            </template>
             <template slot="visualizar" slot-scope="data">
               <md-button
                 class="md-success md-sm"
@@ -69,7 +84,7 @@ export default {
       editInstitution: false,
       mensagens: [],
       institutions: this.obterInstitutions(),
-      fields: ["name", "address", "types", "status", "visualizar"],
+      fields: ["Nome", "Endereço", "Tipos", "Estado", "visualizar"],
       institution_selected: null
     };
   },
@@ -81,21 +96,24 @@ export default {
         this.editInstitution = true;
       });
     },
-    autenticaSessao(){
-      if(localStorage.logged_institution && localStorage.token){
-        this.$http.get("institution/validate_token?token="+localStorage.token).then(res => {
-          this.$http.get("institution/" + this.selected_institution).then(res => {
-            this.$store.state.logged_institution = res.data;
-          });
-        }).catch(err => {
-          this.flashMessage.show({status: 'error', title: 'Error', message: this.$store.state.error.sessao})
-          this.$router.push('/');
-        });
-      }else{
-          this.flashMessage.show({status: 'error', title: 'Error', message: this.$store.state.error.sessao})
-        this.$router.push('/');
-      }
-    },
+		autenticaSessao(){
+		  if(localStorage.logged_institution && localStorage.token){
+		    this.$http.get("institution/validate_token?token="+localStorage.token).then(res => {
+		      this.$http.get("institution/" + localStorage.logged_institution).then(res => {
+		        this.$store.state.logged_institution = res.data;
+		      }).catch(err => {
+		      this.flashMessage.show({status: 'error', title: 'Error', message: this.$store.state.error.sessao})
+		      this.$router.push('/');
+		    });
+		    }).catch(err => {
+		      this.flashMessage.show({status: 'error', title: 'Error', message: this.$store.state.error.sessao})
+		      this.$router.push('/');
+		    });
+		  }else{
+		      this.flashMessage.show({status: 'error', title: 'Error', message: this.$store.state.error.sessao})
+		    this.$router.push('/');
+		  }
+		},
     limpar() {
       (this.name = ""),
         (this.address = ""),
@@ -124,6 +142,21 @@ export default {
             tipo: "danger"
           });
         });
+    },
+    recuperaTipos(array){
+      for (let index = 0; index < array.length; index++) {
+        var aux = [];
+        if (array[index] == 'FOOD' ) {
+          aux.push("Alimentos")
+        } if (array[index]  == 'CLOTHING') {
+          aux.push("Roupas")
+        } if (array[index]  == 'RELIGION') {
+          aux.push("Religião")
+        } else {
+          aux.push("Outros")
+        }
+      }
+      return aux.toString();
     },
     editar() {
       const metodo = "put";

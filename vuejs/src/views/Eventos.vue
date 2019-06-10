@@ -279,7 +279,6 @@ export default {
         this.region = res.data;
         this.region = this.region.calendars.filter(this.filtrarCalendario)[0];
         this.url = "https://calendar.google.com/calendar/b/1/embed?height=600&wkst=1&bgcolor=%23ffffff&ctz=America%2FSao_Paulo&"+"src="+ this.region.gcloud_id+ "&color=%237CB342&color=%239E69AF&color=%23009688&color=%23EF6C00&showTitle=0&showDate=1&showPrint=0&showTabs=1&showTz=0&showCalendars=0"
-        console.log(this.region.gcloud_id);
      });          
 		},
     obterRegions() {
