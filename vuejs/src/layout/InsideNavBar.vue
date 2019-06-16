@@ -143,7 +143,6 @@ export default {
     }
   },
   data() {
-    this.autenticaSessao()
     return {
       toggledClass: false,
       status: null
@@ -158,17 +157,23 @@ export default {
   },
   methods: {
     autenticaSessao(){
-      if(localStorage.logged_institution && localStorage.token){
-        this.$http.get("institution/validate_token?token="+localStorage.token).then(res => {
-          this.$http.get("institution/" + localStorage.logged_institution).then(res => {
-            this.$store.state.logged_institution = res.data;
-            this.gerenciaNavBar()
-          });
-        }).catch(err => {
-          this.gerenciaNavBar()
-        });
-      }
-    },
+		  if(localStorage.logged_institution && localStorage.token){
+		    this.$http.get("institution/validate_token?token="+localStorage.token).then(res => {
+		      this.$http.get("institution/" + localStorage.logged_institution).then(res => {
+		        this.$store.state.logged_institution = res.data;
+		      }).catch(err => {
+		      this.flashMessage.show({status: 'error', title: 'Error', message: this.$store.state.error.sessao})
+		      this.$router.push('/');
+		    });
+		    }).catch(err => {
+		      this.flashMessage.show({status: 'error', title: 'Error', message: this.$store.state.error.sessao})
+		      this.$router.push('/');
+		    });
+		  }else{
+		      this.flashMessage.show({status: 'error', title: 'Error', message: this.$store.state.error.sessao})
+		    this.$router.push('/');
+		  }
+		},
     gerenciaNavBar(){
       if(this.$store.state.logged_institution!=null){
         this.status = this.$store.state.logged_institution.admin
@@ -178,8 +183,8 @@ export default {
       console.log(this.status);
     },
     logout(){
-      localStorage.logged_institution = null;
-      localStorage.token = null;
+      delete localStorage.logged_institution;
+      delete localStorage.token;
       this.autenticaSessao();
     },
     bodyClick() {

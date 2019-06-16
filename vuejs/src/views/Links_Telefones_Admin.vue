@@ -189,20 +189,23 @@ export default {
         });
     },
     autenticaSessao(){
-      if(localStorage.logged_institution && localStorage.token){
-        this.$http.get("institution/validate_token?token="+localStorage.token).then(res => {
-          this.$http.get("institution/" + this.selected_institution).then(res => {
-            this.$store.state.logged_institution = res.data;
-          });
-        }).catch(err => {
-          this.flashMessage.show({status: 'error', title: 'Error', message: this.$store.state.error.sessao})
-          this.$router.push('/');
-        });
-      }else{
-          this.flashMessage.show({status: 'error', title: 'Error', message: this.$store.state.error.sessao})
-        this.$router.push('/');
-      }
-    },
+		  if(localStorage.logged_institution && localStorage.token){
+		    this.$http.get("institution/validate_token?token="+localStorage.token).then(res => {
+		      this.$http.get("institution/" + localStorage.logged_institution).then(res => {
+		        this.$store.state.logged_institution = res.data;
+		      }).catch(err => {
+		      this.flashMessage.show({status: 'error', title: 'Error', message: this.$store.state.error.sessao})
+		      this.$router.push('/');
+		    });
+		    }).catch(err => {
+		      this.flashMessage.show({status: 'error', title: 'Error', message: this.$store.state.error.sessao})
+		      this.$router.push('/');
+		    });
+		  }else{
+		      this.flashMessage.show({status: 'error', title: 'Error', message: this.$store.state.error.sessao})
+		    this.$router.push('/');
+		  }
+		},
     editar() {
       this.excluir(this.info_selected.id);
       this.info.name = this.info_selected.name;
