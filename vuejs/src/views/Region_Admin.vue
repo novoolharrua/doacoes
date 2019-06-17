@@ -32,6 +32,43 @@
             >
 					</div>
         </div>
+			<!-- CRIAR NOVA REGIAO MODAL -->
+			<modal v-if="newRegion" @close="newRegionHide" >
+					<template slot="header">
+			      <h4 class="modal-title"> Criar Região</h4>
+			      <md-button
+			        class="md-simple md-just-icon md-round modal-default-button"
+			        @click="newRegionHide"
+			      >x
+			      </md-button>
+			    </template>
+			
+			    <template slot="body">
+			      <md-field>
+			        <label>Nome da Região</label>
+			        <md-input v-model="region.name" type="text"></md-input>
+			      </md-field>
+			      <md-field>
+			        <label>Endereço da Região</label>
+			        <md-input v-model="region.address" type="text"></md-input>
+			      </md-field>      
+			      <md-field>
+			        <label>Numero de Pessoas na Região</label>
+			        <md-input v-model="region.population" type="text"></md-input>
+			      </md-field>
+			    </template>
+			
+			    <template slot="footer">
+			      
+						<md-button
+							class="md-danger md-simple"
+			        @click="newRegionHide"
+			        >Cancelar</md-button
+			      >
+			      <md-button @click="salvar" class="md-simple md-success"> Criar Região</md-button>
+						
+			    </template>
+			  </modal>
 				<!-- EDITAR REGIAO ATUAL -->
 				<modal v-if="editRegion" @close="editRegionHide">
 			    <template slot="header">
@@ -44,7 +81,19 @@
 			    </template>
 			
 			    <template slot="body">
-			    
+			      <md-field>
+			        <label>Nome da Região</label>
+			        <md-input v-model="region_selected.name" type="text"></md-input>
+			      </md-field>
+			      <md-field>
+			        <label>Endereço da Região</label>
+			        <md-input v-model="region_selected.address" type="text"></md-input>
+			      </md-field>      
+			      <md-field>
+			        <label>Numero de Pessoas na Região</label>
+			        <md-input v-model="region_selected.population" type="text"></md-input>
+			      </md-field>
+				 <iframe class="calendarView" :src="url"></iframe>
 			    </template>
 			
 			    <template slot="footer">
@@ -70,6 +119,7 @@ export default {
 	data() {
 		this.autenticaSessao()
 		return {
+			url: null,
 			newRegion: false,
 			editRegion: false,
 			fields:['name','address','population','visualizar'],
@@ -124,9 +174,12 @@ export default {
 		autenticaSessao(){
 		  if(localStorage.logged_institution && localStorage.token){
 		    this.$http.get("institution/validate_token?token="+localStorage.token).then(res => {
-		      this.$http.get("institution/" + this.selected_institution).then(res => {
+		      this.$http.get("institution/" + localStorage.logged_institution).then(res => {
 		        this.$store.state.logged_institution = res.data;
-		      });
+		      }).catch(err => {
+		      this.flashMessage.show({status: 'error', title: 'Error', message: this.$store.state.error.sessao})
+		      this.$router.push('/');
+		    });
 		    }).catch(err => {
 		      this.flashMessage.show({status: 'error', title: 'Error', message: this.$store.state.error.sessao})
 		      this.$router.push('/');
@@ -169,13 +222,15 @@ export default {
       },
 		newRegionHide() {
 			this.limpar()
-      this.newRegion = false;
+      	this.newRegion = false;
 		},
 		editRegionModal(data) {
 			this.region_selected = null;
 			this.$http.get('region/'+data.id_region).then(res => {
 				this.region_selected = res.data;
 				this.editRegion = true;
+				this.region = res.data;
+        		this.url = "https://calendar.google.com/calendar/b/1/embed?height=600&wkst=1&bgcolor=%23ffffff&ctz=America%2FSao_Paulo&"+"src="+ this.region.calendars[0].gcloud_id+"&amp;src=" + this.region.calendars[1].gcloud_id+"&amp;src=" + this.region.calendars[2].gcloud_id+ "&color=%237CB342&color=%239E69AF&color=%23009688&color=%23EF6C00&showTitle=0&showDate=1&showPrint=0&showTabs=1&showTz=0&showCalendars=0"
 				});
 		},
 		editRegionHide() {

@@ -32,7 +32,7 @@
                   <md-card class="md-card-plain">
                     <h4 class="card-title">Sobre o novolharua</h4>
                     <p>
-                      <a href="#quem_somos">Quem Somos</a>
+                      <a @click="scrollToElement('quem_somos')">Quem Somos</a>
                       <img :src="tip" class="img-tip" id="tip-quem_somos">
                       <b-tooltip
                         target="tip-quem_somos"
@@ -40,7 +40,7 @@
                       >Unidos para a ajudar a população em situação de rua – Parte da história e da necessidade de se fazer uma entidade e desenvolver um aplicativo que organizar a assistência à essa população.</b-tooltip>
                     </p>
                     <p>
-                      <a href="#apoiadores">Apoiadores</a>
+                      <a @click="scrollToElement('apoiadores')">Apoiadores</a>
                       <img :src="tip" class="img-tip" id="tip-apoiadores">
                       <b-tooltip
                         target="tip-apoiadores"
@@ -48,7 +48,7 @@
                       >Aqui você poderá constatar que várias entidades e indivíduos se organizaram em volta dessa ideia, se propondo a mudarem a realidade da população de rua. Os mesmos passam por uma criteriosa avaliação antes de integrarem essa lista.</b-tooltip>
                     </p>
                     <p>
-                      <a href="#patrocinadores">Patrocinadores</a>
+                      <a @click="scrollToElement('patrocinadores')">Patrocinadores</a>
                       <img :src="tip" class="img-tip" id="tip-patrocinadores">
                       <b-tooltip
                         target="tip-patrocinadores"
@@ -56,7 +56,7 @@
                       >Os patrocinadores são empresas, entidades e pessoas comprometidas com o compromisso social e que ajudam de forma importante, não só na manutenção do site, na organização dos diversos integrantes, mas também atendendo algumas necessidades dos grupos. Esclarecendo que, como associação, não temos fins lucrativos e a diretoria não recebe por suas atividades. Por definição, todo o lucro auferido é convertido dentro do mesmo período fiscal em atividade assistencial.</b-tooltip>
                     </p>
                     <p>
-                      <a href="#contatos">Contatos</a>
+                      <a @click="scrollToElement('contatos')">Contatos</a>
                       <img :src="tip" class="img-tip" id="tip-contato">
                       <b-tooltip
                         target="tip-contato"
@@ -71,7 +71,7 @@
                   <md-card class="md-card-plain">
                     <h4 class="card-title">Como Participar</h4>
                     <p>
-                      <a href="#">Quero Participar</a>
+                      <a @click="registrarModal = true">Quero Participar</a>
                       <img :src="tip" class="img-tip" id="tip-participar">
                       <b-tooltip
                         target="tip-participar"
@@ -79,7 +79,7 @@
                       >Inscreva-se e passe a participar como integrante dessa equipe.</b-tooltip>
                     </p>
                     <p>
-                      <a href="#">Já sou doador</a>
+                      <a @click="loginModal = true">Já sou doador</a>
                       <img :src="tip" class="img-tip" id="tip-doador">
                       <b-tooltip
                         target="tip-doador"
@@ -87,7 +87,7 @@
                       >Acessando a área do doador com seu Login e Senha, você terá acesso a área de doações.</b-tooltip>
                     </p>
                     <p>
-                      <a href="/links">Links e telefones úteis</a>
+                      <a href="#/links">Links e telefones úteis</a>
                       <img :src="tip" class="img-tip" id="tip-links">
                       <b-tooltip
                         target="tip-links"
@@ -110,7 +110,7 @@
                       >Permite criar um evento de doação, definindo data, tipo de donativo e região que recebera esses donativos.</b-tooltip>
                     </p>
                     <p>
-                      <a href="#apoiadores">Vizualizar regiões</a>
+                      <a href="#/region">Vizualizar regiões</a>
                       <img :src="tip" class="img-tip" id="tip-regioes">
                       <b-tooltip
                         target="tip-regioes"
@@ -577,6 +577,12 @@ export default {
     };
   },
   methods: {
+    scrollToElement(element) {
+      let element_id = document.getElementById(element);
+      if (element_id) {
+        element_id.scrollIntoView({ block: "end", behavior: "smooth" });
+      }
+    },
     registrarModalHide() {
       this.registrarModal = false;
     },

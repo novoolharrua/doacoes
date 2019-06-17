@@ -4,10 +4,11 @@ import Inicio from "./views/Inicio.vue";
 import InsideNavbar from "./layout/InsideNavBar.vue";
 import MainFooter from "./layout/MainFooter.vue";
 import Instituicoes_Admin from "./views/Instituicoes_Admin.vue";
+import Region_Admin from "./views/Region_Admin.vue";
 import Region from "./views/Region.vue";
 import Eventos from "./views/Eventos.vue";
 import Links_Telefones from "./views/Links_Telefones.vue";
-import MainNavbar from "./layout/MainNavbar.vue";
+import MainNavbar from "./layout/MainNavBar.vue";
 import Links_Telefones_Admin from "./views/Links_Telefones_Admin.vue";
 
 Vue.use(Router);
@@ -16,6 +17,15 @@ export default new Router({
     routes: [{
             path: "/admin_region",
             name: "admin_region",
+            components: { default: Region_Admin, header: InsideNavbar, footer: MainFooter },
+            props: {
+                header: { colorOnScroll: 400 },
+                footer: { backgroundColor: "black" }
+            }
+        },
+        {
+            path: "/region",
+            name: "region",
             components: { default: Region, header: InsideNavbar, footer: MainFooter },
             props: {
                 header: { colorOnScroll: 400 },

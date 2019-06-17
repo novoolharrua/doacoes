@@ -29,31 +29,37 @@
 
               <md-list-item
                 href="javascript:void(0)"
-                @click="scrollToElement()"
+                @click="scrollTopPage()"
               >
                <p>Inicio</p>
               </md-list-item>
               <md-list-item
                 href="javascript:void(0)"
-                @click="scrollToElement()"
+                @click="scrollToElement('mapa-site')"
+              >
+               <p>Mapa do Site</p>
+              </md-list-item>
+              <md-list-item
+                href="javascript:void(0)"
+                @click="scrollToElement('quem_somos')"
               >
                <p>Quem Somos</p>
               </md-list-item>
               <md-list-item
                 href="javascript:void(0)"
-                @click="scrollToElement()"
+                @click="scrollToElement('apoiadores')"
               >
                <p>Apoiadores</p>
               </md-list-item>
               <md-list-item
                 href="javascript:void(0)"
-                @click="scrollToElement()"
+                @click="scrollToElement('patrocinadores')"
               >
-               <p>Patriocinadores</p>
+               <p>Patrocinadores</p>
               </md-list-item>
               <md-list-item
                 href="javascript:void(0)"
-                @click="scrollToElement()"
+                @click="scrollToElement('contatos')"
               >
                <p>Contato</p>
               </md-list-item>
@@ -75,6 +81,11 @@
                         <li>
                           <a href="#/links">
                             <p>Links Uteis</p>
+                          </a>
+                        </li>
+                        <li>
+                          <a href="#/region">
+                            <p>Regiões Atendidas</p>
                           </a>
                         </li>
                       </ul>
@@ -204,8 +215,11 @@ export default {
     scrollListener() {
       resizeThrottler(this.handleScroll);
     },
-    scrollToElement() {
-      let element_id = document.getElementById("downloadSection");
+    scrollTopPage(){
+      document.body.scrollTop = document.documentElement.scrollTop = 0
+    },
+    scrollToElement(element) {
+      let element_id = document.getElementById(element);
       if (element_id) {
         element_id.scrollIntoView({ block: "end", behavior: "smooth" });
       }
