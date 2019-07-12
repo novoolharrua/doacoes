@@ -41,21 +41,21 @@
                 <p>Eventos</p>
               </a>
               </md-list-item>
-              <md-list-item v-if="this.status == 1"
+              <md-list-item v-if="this.$store.state.logged_institution!=null && this.$store.state.logged_institution.admin == 1"
                 href="javascript:void(0)"
               >
               <a href="#/admin_institution">
                 <p>Gerenciar Instituições</p>
               </a>
               </md-list-item>
-              <md-list-item v-if="this.status == 1"
+              <md-list-item v-if="this.$store.state.logged_institution!=null && this.$store.state.logged_institution.admin == 1"
                 href="javascript:void(0)"
               >
               <a href="#/admin_info">
                 <p>Gerenciar Informações</p>
               </a>
               </md-list-item>
-              <md-list-item v-if="this.status == 1"
+              <md-list-item v-if="this.$store.state.logged_institution!=null && this.$store.state.logged_institution.admin == 1"
                 href="javascript:void(0)"
               >
               <a href="#/admin_region">
@@ -185,6 +185,8 @@ export default {
     logout(){
       delete localStorage.logged_institution;
       delete localStorage.token;
+      this.$store.state.logged_institution = null;
+      this.$store.state.token = null;
       this.autenticaSessao();
     },
     bodyClick() {

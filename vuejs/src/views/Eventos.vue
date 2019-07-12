@@ -27,7 +27,7 @@
                 <img
                   class="icone"
                   src="https://img.icons8.com/color/48/000000/google-maps.png"
-                >
+                />
               </md-button>
             </template>
             <template slot="Data" slot-scope="data">{{data.item.date}}</template>
@@ -238,10 +238,11 @@ export default {
           this.obterEventos();
         })
         .catch(err => {
-          this.mensagens.push({
-            texto: "Problema para excluir!",
-            tipo: "danger"
-          });
+          this.flashMessage.show({
+          title: "Error",
+          status: "error",
+          message: "Problema para excluir!"
+        });
         });
     },
     salvar() {
@@ -261,9 +262,10 @@ export default {
           this.selected_region,
         this.event
       ).then(() => {
-        this.mensagens.push({
-          texto: "Operação realizada com sucesso!",
-          tipo: "success"
+        this.flashMessage.show({
+          title: "Sucesso",
+          status: "success",
+          message: "Operação realizada com sucesso!"
         });
       });
       this.obterEventos();

@@ -158,7 +158,8 @@ export default {
   },
   data() {
     return {
-      toggledClass: false
+      toggledClass: false,
+      infos:null
     };
   },
   computed: {
@@ -221,7 +222,7 @@ export default {
     scrollToElement(element) {
       let element_id = document.getElementById(element);
       if (element_id) {
-        element_id.scrollIntoView({ block: "end", behavior: "smooth" });
+        element_id.scrollIntoView({ block: "start", behavior: "smooth" });
       }
     }
   },

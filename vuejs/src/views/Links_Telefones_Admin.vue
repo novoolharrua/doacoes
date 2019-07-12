@@ -81,7 +81,7 @@
 
         <template slot="footer">
           <md-button class="md-danger md-simple" @click="newLinkHide">Cancelar</md-button>
-          <md-button @click="salvar" class="md-simple md-success">Criar Região</md-button>
+          <md-button @click="salvar" class="md-simple md-success">Criar Informação</md-button>
         </template>
       </modal>
 
@@ -170,7 +170,6 @@ export default {
         (this.image = ""),
         (this.description = ""),
         (this.id = null);
-      this.mensagens = [];
     },
     excluir(id) {
       this.$http
@@ -179,13 +178,19 @@ export default {
           this.limpar();
           this.obterInfos();
           this.editLinkHide();
+          this.flashMessage.show({
+            title: "Sucesso",
+            status: "success",
+            message: this.$store.state.success.excluir_link_util
+          });
         })
         .catch(err => {
           this.limpar();
-          this.mensagens.push({
-            texto: "Problema para excluir!",
-            tipo: "danger"
-          });
+            this.flashMessage.show({
+              status: "error",
+              title: "Error",
+              message: this.$store.state.error.excluir_link_util
+            });
         });
     },
     autenticaSessao(){
@@ -230,10 +235,17 @@ export default {
       this.$http[metodo](`/info`, this.info).then(() => {
         this.limpar();
         this.obterInfos();
-        this.mensagens.push({
-          texto: "Operação realizada com sucesso!",
-          tipo: "success"
-        });
+        this.flashMessage.show({
+              status: "success",
+              title: "Sucesso",
+              message: this.$store.state.success.criar_link_util
+            });
+      }).catch(err =>{
+        this.flashMessage.show({
+              status: "error",
+              title: "Error",
+              message: this.$store.state.error.criar_link_util
+            });
       });
     },
 

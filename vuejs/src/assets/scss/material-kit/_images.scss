@@ -4,11 +4,22 @@
 
 .img-raised {
     @include shadow-big-image();
+    width: 100px;
+}
+
+.img-raised-size {
+    min-height: 145px;
+    min-width: 145px;
 }
 
 .size-img-link {
     width: 10vh;
     height: 10vh;
+}
+
+.image-block {
+    width: 145px;
+    height: 145px;
 }
 
 .icone {

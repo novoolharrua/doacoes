@@ -32,32 +32,28 @@
                   <md-card class="md-card-plain">
                     <h4 class="card-title">Sobre o novolharua</h4>
                     <p>
-                      <a @click="scrollToElement('quem_somos')">Quem Somos</a>
-                      <img :src="tip" class="img-tip" id="tip-quem_somos">
+                      <a id="tip-quem_somos" class="cursor-click" @click="scrollToElement('quem_somos')">Quem Somos <img :src="tip" class="img-tip" ></a>
                       <b-tooltip
                         target="tip-quem_somos"
                         placement="right"
                       >Unidos para a ajudar a população em situação de rua – Parte da história e da necessidade de se fazer uma entidade e desenvolver um aplicativo que organizar a assistência à essa população.</b-tooltip>
                     </p>
                     <p>
-                      <a @click="scrollToElement('apoiadores')">Apoiadores</a>
-                      <img :src="tip" class="img-tip" id="tip-apoiadores">
+                      <a id="tip-apoiadores" class="cursor-click" @click="scrollToElement('apoiadores')">Apoiadores <img :src="tip" class="img-tip"></a>
                       <b-tooltip
                         target="tip-apoiadores"
                         placement="right"
                       >Aqui você poderá constatar que várias entidades e indivíduos se organizaram em volta dessa ideia, se propondo a mudarem a realidade da população de rua. Os mesmos passam por uma criteriosa avaliação antes de integrarem essa lista.</b-tooltip>
                     </p>
                     <p>
-                      <a @click="scrollToElement('patrocinadores')">Patrocinadores</a>
-                      <img :src="tip" class="img-tip" id="tip-patrocinadores">
+                      <a id="tip-patrocinadores" class="cursor-click" @click="scrollToElement('patrocinadores')">Patrocinadores <img :src="tip" class="img-tip" ></a>
                       <b-tooltip
                         target="tip-patrocinadores"
                         placement="right"
                       >Os patrocinadores são empresas, entidades e pessoas comprometidas com o compromisso social e que ajudam de forma importante, não só na manutenção do site, na organização dos diversos integrantes, mas também atendendo algumas necessidades dos grupos. Esclarecendo que, como associação, não temos fins lucrativos e a diretoria não recebe por suas atividades. Por definição, todo o lucro auferido é convertido dentro do mesmo período fiscal em atividade assistencial.</b-tooltip>
                     </p>
                     <p>
-                      <a @click="scrollToElement('contatos')">Contatos</a>
-                      <img :src="tip" class="img-tip" id="tip-contato">
+                      <a id="tip-contato" class="cursor-click" @click="scrollToElement('contatos')">Contatos <img :src="tip" class="img-tip"></a>
                       <b-tooltip
                         target="tip-contato"
                         placement="right"
@@ -71,24 +67,21 @@
                   <md-card class="md-card-plain">
                     <h4 class="card-title">Como Participar</h4>
                     <p>
-                      <a @click="registrarModal = true">Quero Participar</a>
-                      <img :src="tip" class="img-tip" id="tip-participar">
+                      <a id="tip-participar" class="cursor-click" @click="registrarModal = true">Quero Participar <img :src="tip" class="img-tip"></a>
                       <b-tooltip
                         target="tip-participar"
                         placement="right"
                       >Inscreva-se e passe a participar como integrante dessa equipe.</b-tooltip>
                     </p>
                     <p>
-                      <a @click="loginModal = true">Já sou doador</a>
-                      <img :src="tip" class="img-tip" id="tip-doador">
+                      <a id="tip-doador" class="cursor-click" @click="loginModal = true">Já sou doador <img :src="tip" class="img-tip"></a>
                       <b-tooltip
                         target="tip-doador"
                         placement="right"
                       >Acessando a área do doador com seu Login e Senha, você terá acesso a área de doações.</b-tooltip>
                     </p>
                     <p>
-                      <a href="#/links">Links e telefones úteis</a>
-                      <img :src="tip" class="img-tip" id="tip-links">
+                      <a id="tip-links" class="cursor-click" href="#/links">Links e telefones úteis<img :src="tip" class="img-tip"></a>
                       <b-tooltip
                         target="tip-links"
                         placement="right"
@@ -102,16 +95,14 @@
                   <md-card class="md-card-plain">
                     <h4 class="card-title">Já sou cadastrado</h4>
                     <p>
-                      <a href="#quem_somos">Criar evento</a>
-                      <img :src="tip" class="img-tip" id="tip-eventos">
+                      <a id="tip-eventos" class="cursor-click" @click="criarEvento()">Criar evento<img :src="tip" class="img-tip"></a>
                       <b-tooltip
                         target="tip-eventos"
                         placement="right"
                       >Permite criar um evento de doação, definindo data, tipo de donativo e região que recebera esses donativos.</b-tooltip>
                     </p>
                     <p>
-                      <a href="#/region">Vizualizar regiões</a>
-                      <img :src="tip" class="img-tip" id="tip-regioes">
+                      <a id="tip-regioes" class="cursor-click" href="#/region">Vizualizar regiões<img :src="tip" class="img-tip"></a>
                       <b-tooltip
                         target="tip-regioes"
                         placement="right"
@@ -171,88 +162,19 @@
           <h2 class="title">Apoiadores</h2>
           <div class="team">
             <div class="md-layout">
-              <div class="md-layout-item md-medium-size-33 md-small-size-100">
+              <div v-for="info in this.infos.slice(0, 3)" :key="info" class="md-layout-item md-medium-size-33 md-small-size-100">
                 <div class="team-player">
-                  <md-card class="md-card-plain">
-                    <div class="md-layout-item md-size-50 mx-auto">
+                  <md-card class="md-card-plain text-center">
+                    <div class="md-layout-item image-block mx-auto">
                       <img
-                        :src="teamImg1"
+                        :src="busca_imagem(info)"
                         alt="Thumbnail Image"
-                        class="img-raised rounded-box img-fluid"
+                        class="img-raised img-raised-size rounded-box "
                       >
                     </div>
                     <h4 class="card-title">
-                      Vicariato
-                      <br>
-                      <small class="card-description text-muted">Instituição</small>
+                      {{info.name}}
                     </h4>
-                    <md-card-actions class="text-center">
-                      <md-button href="javascript:void(0)" class="md-just-icon md-simple">
-                        <i class="fab fa-twitter"></i>
-                      </md-button>
-                      <md-button href="javascript:void(0)" class="md-just-icon md-simple">
-                        <i class="fab fa-instagram"></i>
-                      </md-button>
-                      <md-button href="javascript:void(0)" class="md-just-icon md-simple">
-                        <i class="fab fa-facebook-square"></i>
-                      </md-button>
-                    </md-card-actions>
-                  </md-card>
-                </div>
-              </div>
-              <div class="md-layout-item md-medium-size-33 md-small-size-100">
-                <div class="team-player">
-                  <md-card class="md-card-plain">
-                    <div class="md-layout-item md-size-50 mx-auto">
-                      <img
-                        :src="teamImg2"
-                        alt="Thumbnail Image"
-                        class="img-raised rounded-box img-fluid"
-                      >
-                    </div>
-                    <h4 class="card-title">
-                      Pastoral rua
-                      <br>
-                      <small class="card-description text-muted">Instituição</small>
-                    </h4>
-                    <md-card-actions class="text-center">
-                      <md-button href="javascript:void(0)" class="md-just-icon md-simple">
-                        <i class="fab fa-twitter"></i>
-                      </md-button>
-                      <md-button href="javascript:void(0)" class="md-just-icon md-simple">
-                        <i class="fab fa-linkedin"></i>
-                      </md-button>
-                    </md-card-actions>
-                  </md-card>
-                </div>
-              </div>
-              <div class="md-layout-item md-medium-size-33 md-small-size-100">
-                <div class="team-player">
-                  <md-card class="md-card-plain">
-                    <div class="md-layout-item md-size-50 mx-auto">
-                      <img
-                        :src="teamImg3"
-                        alt="Thumbnail Image"
-                        class="img-raised rounded-box img-fluid"
-                      >
-                    </div>
-                    <h4 class="card-title">
-                      Amigos do Clovis
-                      <br>
-                      <small class="card-description text-muted">Grupo Individual</small>
-                    </h4>
-
-                    <md-card-actions class="text-center">
-                      <md-button href="javascript:void(0)" class="md-just-icon md-simple">
-                        <i class="fab fa-twitter"></i>
-                      </md-button>
-                      <md-button href="javascript:void(0)" class="md-just-icon md-simple">
-                        <i class="fab fa-instagram"></i>
-                      </md-button>
-                      <md-button href="javascript:void(0)" class="md-just-icon md-simple">
-                        <i class="fab fa-facebook-square"></i>
-                      </md-button>
-                    </md-card-actions>
                   </md-card>
                 </div>
               </div>
@@ -547,7 +469,9 @@ export default {
     }
   },
   data() {
+    this.obterInfos()
     return {
+      infos:this.obterInfos(),
       registrarModal: false,
       loginModal: false,
       name: null,
@@ -577,11 +501,21 @@ export default {
     };
   },
   methods: {
+    obterInfos() {
+      this.$http.get("info").then(res => {
+        
+        this.infos = res.data;
+      });
+    },
     scrollToElement(element) {
       let element_id = document.getElementById(element);
       if (element_id) {
-        element_id.scrollIntoView({ block: "end", behavior: "smooth" });
+        element_id.scrollIntoView({ block: "start", behavior: "smooth" });
       }
+    },
+    busca_imagem(imagem) {
+      console.log(imagem);
+      return imagem.image;
     },
     registrarModalHide() {
       this.registrarModal = false;
@@ -678,6 +612,13 @@ export default {
         this.$correios.get(this.endereco.cep + "/json").then(res => {
           this.endereco = res.data;
         });
+      }
+    },
+    criarEvento(){
+      if(this.logged_institution){
+        this.$router.push({name:"events"});
+      }else{
+        this.loginModal = true;
       }
     },
     recuperaToken() {
