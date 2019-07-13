@@ -11,7 +11,7 @@
               class="md-success md-lg"
               target="_blank"
               @click="registrarModal = true"
-            >Quero Participara</md-button>
+            >Quero Participar</md-button>
             <md-button
               class="md-success md-lg"
               target="_blank"
