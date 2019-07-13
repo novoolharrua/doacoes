@@ -8,31 +8,19 @@
       <nav>
         <ul>
           <li>
-            <a >
-              Creative Tim
+            <a href="http://arquidiocesebh.org.br/">
+              Vicariato bh
             </a>
           </li>
           <li>
-            <a >
-              About Us
-            </a>
-          </li>
-          <li>
-            <a >
-              Blog
-            </a>
-          </li>
-          <li>
-            <a >
-              Licenses
+            <a href="http://arquidiocesebh.org.br/arquidiocese/atuacao/pastorais/pastoral-de-rua/">
+              Pastoralde Rua
             </a>
           </li>
         </ul>
       </nav>
       <div class="copyright">
-        &copy; {{ year }}, made with <md-icon>favorite</md-icon> by
-        <a target="_blank">Creative Tim</a>
-        for a better web.
+        &copy; {{ year }} NOVOLHARUA
       </div>
     </div>
   </footer>

@@ -11,7 +11,7 @@
               class="md-success md-lg"
               target="_blank"
               @click="registrarModal = true"
-            >Quero Participar</md-button>
+            >Quero Participara</md-button>
             <md-button
               class="md-success md-lg"
               target="_blank"
@@ -186,7 +186,7 @@
     <div class="main main-raised-margin" id="patrocinadores">
       <div class="section text-center">
         <div class="container">
-          <h2 class="title">Patriocinadores</h2>
+          <h2 class="title">Patrocinadores</h2>
           <div class="team">
             <div class="md-layout">
               <div class="md-layout-item md-medium-size-33 md-small-size-100">
@@ -457,15 +457,15 @@ export default {
     },
     teamImg1: {
       type: String,
-      default: require("@/assets/img/faces/avatar.jpg")
+      default: require("@/assets/img/faces/vicariato.jpg")
     },
     teamImg2: {
       type: String,
-      default: require("@/assets/img/faces/christian.jpg")
+      default: require("@/assets/img/faces/olhar_rua.png")
     },
     teamImg3: {
       type: String,
-      default: require("@/assets/img/faces/kendall.jpg")
+      default: require("@/assets/img/faces/clovis2.jpg")
     }
   },
   data() {
